@@ -160,7 +160,6 @@ public class Personaje {
         altoFrame = run.getHeight() / numImagenesV_run;
         for (int i = 0; i < numImagenes_run; i++) {
             Bitmap frame = Bitmap.createBitmap(run, cambioH * anchoFrame, cambioV * altoFrame, anchoFrame, altoFrame);
-            ;
             frame = escalaAltura(frame, getPixels(100));
             movimientoRun[i] = frame;
             cambioH++;
