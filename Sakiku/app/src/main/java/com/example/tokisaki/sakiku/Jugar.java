@@ -11,11 +11,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Vibrator;
+import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -28,56 +31,67 @@ import static android.content.Context.VIBRATOR_SERVICE;
 /***
  * Clase que ejecuta los elementos relacionados con el juego , así como el juego en sí
  */
-public class Jugar extends Escenas{
+public class Jugar extends Escenas {
 
     /**
      * instancia de la clase Personaje
      */
     private Personaje corredor;
+
     /**
      * indica el intervalo de tiempo en el que se actualizan los frames
      */
     private long tiempoMove;
+
     /**
      * Fondo de pantalla
      */
     private Bitmap fondo;
+
     /**
      * imagen para el boton de saltar
      */
     private Bitmap btnSalto;
+
     /**
      * imagen para el boton de deslizarse
      */
     private Bitmap btnDesliz;
+
     /**
      * lista con los obstaculos que hay en pantalla
      */
     private ArrayList<Obstaculos> obstaculos; // lista con las balas que hay en pantalla
+
     /**
      * Posicion del fondo para hacer el efecto parallax
      */
     private int postI1;
+
     /**
      * Posicion del fondo para hacer el efecto parallax
      */
     private int postI2;
     private int tickDisparoFrame = 40; // tiempo de refresco de pantalla para los frames del disparo del personaje
     private int puntuacion = 0; // puntuación conseguida
+
     /**
      * tiempo de refresco de pantalla para el movimento sobre el eje X del personaje
      */
     private int tickMove = 30;
     private int v; // volumen de la música
     private int pasear = 0; // numero que calcula cada cuantos frames suena el sonido de las pisadas
+
     /**
      * String que se muestra una vez que acaba la carrera
      */
     private String fin;
+
     /**
      * pincel para las fuentes externas
      */
     private Paint p;
+
     /**
      * pincel para las fuentes externas
      */
@@ -92,6 +106,47 @@ public class Jugar extends Escenas{
 
     private Bitmap disparo; // imagen para el botón de disparar
 
+    /**
+     * Posicion del temporizador del juego
+     */
+    private Point posContador;
+
+    /**
+     * Posicion del boton de disparo
+     */
+    private Point posDisparo;
+
+    /**
+     * Posicion del boton de deslizarse
+     */
+    private Point posBotonDeslizar;
+
+    /**
+     * Posicion del boton de saltar
+     */
+    private Point posBotonSalto;
+
+    /**
+     * Posicion del texto fin
+     */
+    private Point posTextoFin;
+
+    /**
+     * Collider boton de salto
+     */
+    private Rect btnSaltoRect;
+
+    /**
+     * Collider boton deslizarse
+     */
+    private Rect btnDeslizarseRect;
+
+    /**
+     * Collider boton disparo
+     */
+    private Rect btnDisparoRect;
+
+
     /***
      * Constructor de la clase
      * @param numEscena numero de la escena
@@ -99,41 +154,49 @@ public class Jugar extends Escenas{
      * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
      * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Jugar(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
         inicializar();
         obstaculos = new ArrayList<>();
         postI1 = 0;
         postI2 = fondo.getWidth();
-        corredor = new Personaje(context,altoPantalla,anchoPantalla);
+        corredor = new Personaje(context, altoPantalla, anchoPantalla);
         tiempoMove = System.currentTimeMillis();
         segundo = System.currentTimeMillis() + 1000;
         //comenzo = true;
         //v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-
-        disparo= BitmapFactory.decodeResource(context.getResources(), R.drawable.senal);
-        disparo = escalaAnchura(disparo,getPixels(80));
     }
 
     /***
      * Inicializa los elementos necesarios para la clase
      */
-    private void inicializar(){
+    private void inicializar() {
         btnSalto = BitmapFactory.decodeResource(context.getResources(), R.drawable.saltar);
-        btnSalto = escalaAnchura(btnSalto,getPixels(80));
+        btnSalto = escalaAnchura(btnSalto, getPixels(80));
         btnDesliz = BitmapFactory.decodeResource(context.getResources(), R.drawable.deslizarse);
-        btnDesliz = escalaAnchura(btnDesliz,getPixels(80));
-        fondo= BitmapFactory.decodeResource(context.getResources(),R.drawable.fondo);
-        fondo=Bitmap.createScaledBitmap(fondo,anchoPantalla,altoPantalla,true);
-        fin= context.getResources().getString(R.string.Final);
-        p=new Paint();
+        btnDesliz = escalaAnchura(btnDesliz, getPixels(80));
+        disparo = BitmapFactory.decodeResource(context.getResources(), R.drawable.senal);
+        disparo = escalaAnchura(disparo, getPixels(80));
+        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
+        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, true);
+        fin = context.getResources().getString(R.string.Final);
+        p = new Paint();
         p.setColor(Color.RED);
         p.setTextSize(getPixels(50));
         p.setTypeface(faw);
-        l=new Paint();
+        l = new Paint();
         l.setColor(Color.RED);
         l.setTextSize(getPixels(30));
         l.setTypeface(letras);
+        posDisparo = new Point(anchoPantalla - disparo.getWidth(), 0);
+        posContador = new Point(getPixels(20), getPixels(30));
+        posBotonDeslizar = new Point(0, altoPantalla - btnDesliz.getHeight());
+        posBotonSalto = new Point(0, altoPantalla - (btnDesliz.getHeight() + btnSalto.getHeight()));
+        posTextoFin = new Point(anchoPantalla / 2, altoPantalla / 2);
+        btnSaltoRect = new Rect(posBotonSalto.x, posBotonSalto.y, posBotonSalto.x + btnSalto.getWidth(), posBotonSalto.y + btnSalto.getHeight());
+        btnDeslizarseRect = new Rect(posBotonDeslizar.x, posBotonDeslizar.y, posBotonDeslizar.x + btnDesliz.getWidth(), posBotonDeslizar.y + btnDesliz.getHeight());
+        btnDisparoRect = new Rect(posDisparo.x, posDisparo.y, posDisparo.x + disparo.getWidth(), posDisparo.y + disparo.getHeight());
     }
 
     /***
@@ -221,10 +284,10 @@ public class Jugar extends Escenas{
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-        if(contador<=0){
+        if (contador <= 0) {
             finCarrera = true;
         }
-        if(!finCarrera) {
+        if (!finCarrera) {
             postI1 -= getPixels(2);
             postI2 -= getPixels(2);
             if (postI1 + fondo.getWidth() < 0) {
@@ -265,7 +328,6 @@ public class Jugar extends Escenas{
                 }
             }
         }
-
     }
 
     /***
@@ -274,13 +336,13 @@ public class Jugar extends Escenas{
      */
     public void dibujar(Canvas canvas) {
         try {
-            if(!finCarrera) {
+            if (!finCarrera) {
                 canvas.drawColor(Color.BLUE);
                 canvas.drawBitmap(fondo, postI1, 0, null);
                 canvas.drawBitmap(fondo, postI2, 0, null);
-                canvas.drawText("" + contador, 0 + getPixels(20), 0 + getPixels(30), l);
+                canvas.drawText("" + contador, posContador.x, posContador.y, l);
 
-                canvas.drawBitmap(disparo, anchoPantalla - disparo.getWidth(), 0 , null);
+                canvas.drawBitmap(disparo, posDisparo.x, posDisparo.y, null);
 
                 if (salto) {
                     corredor.dibujar(canvas, "salto");
@@ -289,14 +351,14 @@ public class Jugar extends Escenas{
                 } else {
                     corredor.dibujar(canvas, "run");
                 }
-                canvas.drawBitmap(btnDesliz, 0, altoPantalla - btnDesliz.getHeight(), null);
-                canvas.drawBitmap(btnSalto, 0, altoPantalla - (btnDesliz.getHeight() + btnSalto.getHeight()), null);
+                canvas.drawBitmap(btnDesliz, posBotonDeslizar.x, posBotonDeslizar.y, null);
+                canvas.drawBitmap(btnSalto, posBotonSalto.x, posBotonSalto.y, null);
                 for (Obstaculos obs : obstaculos) {
                     obs.dibujar(canvas);
                 }
-            }else{
+            } else {
                 canvas.drawColor(Color.BLACK);
-                canvas.drawText(fin, anchoPantalla/2, altoPantalla/2, l);
+                canvas.drawText(fin, posTextoFin.x, posTextoFin.y, l);
             }
         } catch (Exception e) {
 
@@ -311,24 +373,21 @@ public class Jugar extends Escenas{
     @Override
     public int onTouchEvent(MotionEvent event) {
         int accion = event.getActionMasked();
-        float x = event.getX(), y = event.getY();
+        int x = (int) event.getX(), y = (int) event.getY();
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
-                if(!finCarrera) {
-                    if (x > 0 && x < btnDesliz.getWidth() && y > altoPantalla - btnDesliz.getHeight()) {
+                if (!finCarrera) {
+                    if (btnDeslizarseRect.contains(x, y)) {
                         desliz = true;
                         corredor.numFrame = 0;
-                    } else if (x > 0 && x < btnSalto.getWidth() && y < (altoPantalla - btnDesliz.getHeight())
-                            && y > (altoPantalla - (btnDesliz.getHeight() + btnSalto.getHeight()))) {
+                    } else if (btnSaltoRect.contains(x, y)) {
                         salto = true;
                         corredor.numFrame = 0;
-                    } else if (x > anchoPantalla - disparo.getWidth() && x < anchoPantalla &&
-                            y < ( disparo.getHeight())){
-                        obs = new Obstaculos(context,new PointF(anchoPantalla,
-                                altoPantalla-corredor.movimientoRun[0].getHeight()));
+                    } else if (btnDisparoRect.contains(x, y)) {
+                        obs = new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.movimientoRun[0].getHeight()));
                         obstaculos.add(obs);
                     }
-                }else {
+                } else {
                     return 1;
                 }
                 break;

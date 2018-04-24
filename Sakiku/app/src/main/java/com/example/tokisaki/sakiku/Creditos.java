@@ -11,6 +11,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -54,17 +56,17 @@ public class Creditos extends Escenas {
     /**
      * Ancho del contenedor de descripcion
      */
-    private final int anchoLayoutDescripcion = anchoPantalla / 2;
+    private int anchoLayoutDescripcion;
 
     /**
      * Posicion de dibujo de la cabecera Creditos
      */
-    private final Point posCreditos = new Point(anchoPantalla / 2 - getPixels(75), getPixels(80));
+    private Point posCreditos ;
 
     /**
      * Posicion de dibujado de la descripcion
      */
-    private final Point posDescripcion = new Point(anchoPantalla / 4, getPixels(130));
+    private Point posDescripcion ;
 
     /***
      * Constructor de la clase
@@ -73,6 +75,7 @@ public class Creditos extends Escenas {
      * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
      * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Creditos(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
         inicializar();
@@ -100,6 +103,10 @@ public class Creditos extends Escenas {
         p.setColor(Color.RED);
         p.setTextSize(getPixels(40));
         p.setTypeface(faw);
+
+        anchoLayoutDescripcion = anchoPantalla / 2;
+        posCreditos = new Point(anchoPantalla / 2 - getPixels(75), getPixels(80));
+        posDescripcion = new Point(anchoPantalla / 4, getPixels(130));
     }
 
     /***
