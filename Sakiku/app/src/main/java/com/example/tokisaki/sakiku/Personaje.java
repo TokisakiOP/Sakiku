@@ -307,15 +307,15 @@ public class Personaje {
      * Dibujamos los elementos en pantalla
      * @param canvas Lienzo sobre el que dibujar
      */
-    public void dibujar(Canvas canvas, String dibujo) throws Exception {
-        switch (dibujo) {
-            case "run":
+    public void dibujar(Canvas canvas) throws Exception {
+        switch (estado) {
+            case CORRIENDO:
                 canvas.drawBitmap(movimientoRun[numFrame], posX, (suelo - movimientoRun[numFrame].getHeight()), null);
                 break;
-            case "salto":
+            case SALTANDO:
                 canvas.drawBitmap(movimientoSalto[numFrame], posX, (suelo - movimientoSalto[numFrame].getHeight()), null);
                 break;
-            case "desliz":
+            case DESLIZANDOSE:
                 canvas.drawBitmap(movimientoDesliz[numFrame], posX, (suelo - movimientoDesliz[numFrame].getHeight()), null);
                 break;
         }

@@ -335,7 +335,7 @@ public class Jugar extends Escenas {
                 }
                 if (obs.detectarColision(corredor)) {
                     corredor.setRectangulos(corredor.estado);
-                    finCarrera=true;
+                    finCarrera = true;
                 }
             }
         }
@@ -352,16 +352,8 @@ public class Jugar extends Escenas {
                 canvas.drawBitmap(fondo, postI1, 0, null);
                 canvas.drawBitmap(fondo, postI2, 0, null);
                 canvas.drawText("" + contador, posContador.x, posContador.y, l);
-
                 canvas.drawBitmap(disparo, posDisparo.x, posDisparo.y, null);
-
-                if (salto) {
-                    corredor.dibujar(canvas, "salto");
-                } else if (desliz) {
-                    corredor.dibujar(canvas, "desliz");
-                } else {
-                    corredor.dibujar(canvas, "run");
-                }
+                corredor.dibujar(canvas);
                 canvas.drawBitmap(btnDesliz, posBotonDeslizar.x, posBotonDeslizar.y, null);
                 canvas.drawBitmap(btnSalto, posBotonSalto.x, posBotonSalto.y, null);
                 for (Obstaculos obs : obstaculos) {
@@ -467,7 +459,6 @@ public class Jugar extends Escenas {
         }
         return numEscena;
     }
-
 }
 
 
