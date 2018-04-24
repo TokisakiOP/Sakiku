@@ -19,6 +19,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -146,6 +147,11 @@ public class Jugar extends Escenas {
      */
     private Rect btnDisparoRect;
 
+    /**
+     * Velocidad a la que se mueve el fondo
+     */
+    private int velocidadFondo;
+
 
     /***
      * Constructor de la clase
@@ -181,6 +187,7 @@ public class Jugar extends Escenas {
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, true);
         fin = context.getResources().getString(R.string.Final);
+        velocidadFondo = getPixels(2);
         p = new Paint();
         p.setColor(Color.RED);
         p.setTextSize(getPixels(50));
@@ -288,8 +295,8 @@ public class Jugar extends Escenas {
             finCarrera = true;
         }
         if (!finCarrera) {
-            postI1 -= getPixels(2);
-            postI2 -= getPixels(2);
+            postI1 -= velocidadFondo;
+            postI2 -= velocidadFondo;
             if (postI1 + fondo.getWidth() < 0) {
                 postI1 = postI2 + fondo.getWidth();
             }
@@ -303,28 +310,32 @@ public class Jugar extends Escenas {
             }
             if (System.currentTimeMillis() - tiempoMove > tickMove) {
                 if (salto) {
-                    corredor.actualizarFisica("salto");
+                    corredor.actualizarFisica(eEstadoPersonaje.SALTANDO);
                     if (corredor.numFrame == corredor.movimientoSalto.length - 1) {
                         salto = false;
                         corredor.suelo = corredor.fijo;
                     }
                 } else if (desliz) {
-                    corredor.actualizarFisica("desliz");
+                    corredor.actualizarFisica(eEstadoPersonaje.DESLIZANDOSE);
                     if (corredor.numFrame == corredor.movimientoDesliz.length - 1) {
                         desliz = false;
                     }
                 } else {
-                    corredor.actualizarFisica("run");
+                    corredor.actualizarFisica(eEstadoPersonaje.CORRIENDO);
                 }
                 tiempoMove = System.currentTimeMillis();
             }
+
             for (Obstaculos obs : obstaculos) {
-                obs.actualizarFisica();
-                if (obs.posicion.y < 0 - obs.movimientoObstaculo[obs.numFrame].getHeight() ||
-                        obs.posicion.x > anchoPantalla + obs.movimientoObstaculo[obs.numFrame].getWidth()
-                        || obs.posicion.x < 0 - obs.movimientoObstaculo[obs.numFrame].getWidth()) {
+                if (obs.actualizarFisica(anchoPantalla)) {
                     obstaculos.remove(obs);
+                    //Aqui por leer en orden fuerza a esperar a la siguiente ejecucion para seguir trabajando con el resto
+                    //si en vez de 50 fps , fueses a 1 , verias el resto de disparos quietos 1 segundo entero :S
                     break;
+                }
+                if (obs.detectarColision(corredor)) {
+                    corredor.setRectangulos(corredor.estado);
+                    finCarrera=true;
                 }
             }
         }
@@ -361,7 +372,6 @@ public class Jugar extends Escenas {
                 canvas.drawText(fin, posTextoFin.x, posTextoFin.y, l);
             }
         } catch (Exception e) {
-
         }
     }
 
@@ -384,8 +394,7 @@ public class Jugar extends Escenas {
                         salto = true;
                         corredor.numFrame = 0;
                     } else if (btnDisparoRect.contains(x, y)) {
-                        obs = new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.movimientoRun[0].getHeight()));
-                        obstaculos.add(obs);
+                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.movimientoRun[0].getHeight())));
                     }
                 } else {
                     return 1;
