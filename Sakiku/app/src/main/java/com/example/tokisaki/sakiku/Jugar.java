@@ -30,8 +30,6 @@ import static android.content.Context.VIBRATOR_SERVICE;
  */
 public class Jugar extends Escenas{
 
-    private Typeface faw = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf"); // Fuente externa
-    private Typeface letras = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf"); // Fuente externa
     /**
      * instancia de la clase Personaje
      */

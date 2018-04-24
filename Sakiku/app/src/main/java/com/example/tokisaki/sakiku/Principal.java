@@ -21,14 +21,6 @@ import android.view.MotionEvent;
 public class Principal extends Escenas{
 
     /**
-     * Fuente externa
-     */
-    private Typeface faw = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
-    /**
-     * Fuente externa
-     */
-    private Typeface letras = Typeface.createFromAsset(context.getAssets(),"fontawesome-webfont.ttf");
-    /**
      * pincel para las fuentes externas
      */
     private Paint p;

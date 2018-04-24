@@ -22,16 +22,6 @@ import android.view.MotionEvent;
 public class Creditos extends Escenas {
 
     /**
-     * fuente externa
-     */
-    private Typeface letras = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
-    
-    /**
-     * fuente externa
-     */
-    private Typeface faw = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
-
-    /**
      * pincel para el dibujo de las fuentes externa
      */
     private Paint p;
@@ -123,7 +113,6 @@ public class Creditos extends Escenas {
         this.layoutDescripcion = new StaticLayout(creditosTexto, pDescripcion, anchoLayoutDescripcion, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         c.translate(posDescripcion.x, posDescripcion.y);
         this.layoutDescripcion.draw(c);
-
     }
 
     /***

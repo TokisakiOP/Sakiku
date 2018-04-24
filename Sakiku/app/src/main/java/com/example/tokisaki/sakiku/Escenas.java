@@ -10,9 +10,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -20,48 +23,68 @@ import android.view.WindowManager;
 /***
  * Clase contenedora de todos los elementos comunes de las escenas
  */
-public class Escenas{
+public class Escenas {
+
+    /**
+     * fuente externa
+     */
+    protected Typeface letras;
+
+    /**
+     * fuente externa
+     */
+    protected Typeface faw;
 
     /**
      * contexto de la aplicacion
      */
     protected Context context;
+
     /**
      * instancia de la clase inicio
      */
     protected Inicio music;
+
     /**
      * pincel para texto
      */
     protected Paint pTexto;
+
     /**
      * pincel para botones/rectangulos
      */
     protected Paint pBoton;
+
     /**
      * parametro que nos permitirá asignar los sonidos
      */
     protected SoundPool efectos;
+
     /**
      * imagen de fonde de las escenas secundarias
      */
     Bitmap fondo;
+
     /**
      * parametro que nos permite acceder al sonido
      */
     protected AudioManager audioManager;
+
     /**
      * número de escena
      */
     protected int numEscena;
+
     /**
      * maximo de sonidos simultaneos en la aplicación
      */
-    final protected int maxSonidosSimultaneos=10;
+    final protected int maxSonidosSimultaneos = 10;
+
     /**
      * ancho de la pantalla del dispositivo donde se ejecita la aplicación
      */
     protected int anchoPantalla;
+
     /**
      * alto de la pantalla del dispositivo donde se ejecita la aplicación
      */
@@ -84,6 +107,7 @@ public class Escenas{
      * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
      * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Escenas(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         this.context = context;
         this.numEscena = numEscena;
@@ -91,37 +115,39 @@ public class Escenas{
         this.altoPantalla = altoPantalla;
         inicializarPaints();
         inicializarMusica();
-        music =new Inicio(context);
-        fondo= BitmapFactory.decodeResource(context.getResources(),R.drawable.portada);
-        fondo=Bitmap.createScaledBitmap(fondo,anchoPantalla,altoPantalla,true);
+        music = new Inicio(context);
+        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.portada);
+        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, true);
+        faw = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
+        letras = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
     }
 
     /***
      * inicializa los pinceles que se usaran en las escenas
      */
-    private void inicializarPaints(){
+    private void inicializarPaints() {
         pTexto = new Paint();
         pTexto.setColor(Color.RED);
         pTexto.setTextSize(getPixels(50));
         pBoton = new Paint();
         pBoton.setColor(Color.WHITE);
         pBoton.setAlpha(100);
-
     }
 
     /***
      * Inicializa la musica y los efectos que su usaran en el juego
      */
-    private void inicializarMusica(){
-        audioManager=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void inicializarMusica() {
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if ((android.os.Build.VERSION.SDK_INT) >= 21) {
-            SoundPool.Builder spb=new SoundPool.Builder();
+            SoundPool.Builder spb = new SoundPool.Builder();
             spb.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
             spb.setMaxStreams(maxSonidosSimultaneos);
-            this.efectos=spb.build();
+            this.efectos = spb.build();
         } else {
-            this.efectos=new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
+            this.efectos = new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
         }
         /*sonidoDisparo = efectos.load(context,R.raw.disparo,1);
         sonidoBote = efectos.load(context,R.raw.bote,1);
@@ -146,14 +172,14 @@ public class Escenas{
      * Dibujamos los elementos en pantalla
      * @param c Lienzo sobre el que dibujar
      */
-    public void dibujar (Canvas c){
+    public void dibujar(Canvas c) {
 
     }
 
     /***
      * Actualizamos la física de los elementos en pantalla
      */
-    public void actualizarFisica(){
+    public void actualizarFisica() {
 
     }
 
@@ -162,7 +188,7 @@ public class Escenas{
      * @param event Tipo de pulsación
      * @return numero de la escena actual
      */
-    public int onTouchEvent(MotionEvent event){
+    public int onTouchEvent(MotionEvent event) {
         return numEscena;
     }
 
@@ -174,9 +200,9 @@ public class Escenas{
      */
     public Bitmap escalaAnchura(Bitmap bitmapAux, int nuevoAncho) {
         //Bitmap bitmapAux=BitmapFactory.decodeResource(context.getResources(), res);
-        if (nuevoAncho==bitmapAux.getWidth()) return bitmapAux;
+        if (nuevoAncho == bitmapAux.getWidth()) return bitmapAux;
         return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) /
-                bitmapAux.getWidth(),true);
+                bitmapAux.getWidth(), true);
     }
 
     /***
@@ -188,7 +214,7 @@ public class Escenas{
         DisplayMetrics metrics = new DisplayMetrics();
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().
                 getMetrics(metrics);
-        return (int)(dp*metrics.density);
+        return (int) (dp * metrics.density);
     }
 }
 
