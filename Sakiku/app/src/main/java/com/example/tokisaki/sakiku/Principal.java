@@ -53,6 +53,9 @@ public class Principal extends Escenas{
      */
     private String creditos;
 
+    /**
+     *
+     */
     private String ayuda; // icono para ayuda
 
     /**
@@ -144,13 +147,11 @@ public class Principal extends Escenas{
         creditos = context.getResources().getString(R.string.creditos);
                                                                         //ayuda = context.getResources().getString(R.string.help);
         exit = context.getResources().getString(R.string.salir);
-        play = new Rect(posBx,poxBy,
-                posBf,poxBy+getPixels(50));
+        play = new Rect(posBx,poxBy, posBf,poxBy+getPixels(50));
 
         poxBy+=getPixels(50)*2;
 
-        cre = new Rect(posBx,poxBy,
-                posBf,poxBy+getPixels(50));
+        cre = new Rect(posBx,poxBy, posBf,poxBy+getPixels(50));
 
         poxBy+=getPixels(50)*2;
 
