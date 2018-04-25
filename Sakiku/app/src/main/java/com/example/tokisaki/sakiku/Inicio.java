@@ -8,6 +8,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,6 +24,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     class Hilo extends Thread {
         public Hilo() {
         }
+
         @Override
         public void run() {
             long tiempoDormido = 0; //Tiempo que va a dormir el hilo
@@ -37,7 +40,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                         try {
                             escenaActual.actualizarFisica();
                             escenaActual.dibujar(c);
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                     }
@@ -124,7 +127,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         this.surfaceHolder.addCallback(this);
         hilo = new Hilo();
         setFocusable(true);
-       // creoMusica();
+        // creoMusica();
 
     }
 
@@ -169,7 +172,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     /***
      * funcion que se llama cuando la aplicación pasa a segundo plano
      */
-    protected void enPausa(){
+    protected void enPausa() {
         funcionando = false;
         /*if(jugando)musicaJuego.pause();
         else mediaPlayer.pause();*/
@@ -180,10 +183,11 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    /**+
+    /**
+     * +
      * funcion que se llama cuando se vuelve a conectar con la aplicación
      */
-    protected void vuelta(){
+    protected void vuelta() {
         funcionando = true;
         hilo = new Hilo();
         hilo.start();
@@ -194,10 +198,11 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      * Funcion en la que se escogerá la escena de la aplicación
      * @param escena numero de escena a escoger
      */
-    protected void eleccionEscena(int escena){
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    protected void eleccionEscena(int escena) {
         switch (escena) {
             case 1:
-                jugando=false;
+                jugando = false;
                 escenaActual = new Principal(1, context, anchoPantalla, altoPantalla);
                 break;
             case 2:
@@ -205,7 +210,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                 escenaActual = new Jugar(2, context, anchoPantalla, altoPantalla);
                 break;
             case 3:
-                jugando=false;
+                jugando = false;
                 escenaActual = new Creditos(3, context, anchoPantalla, altoPantalla);
                 break;
         }
@@ -228,6 +233,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      * @param i1 alto de la pantalla donde se situa la surface
      * @param i2 alto de la pantalla donde se situa la surface
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         anchoPantalla = i1;

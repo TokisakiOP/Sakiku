@@ -8,6 +8,6 @@
     <string name="preguntaSalir">Salir del juego ?</string>
     <string name="creditosTitulo">Creditos</string>
     <string name="creditosTexto">Los frames respectivos al robot los he sacado de gameart2d, la música de opengameart, las imagenes de pixbay y las fuentes tanto de fontlibrary como de
-        fontawesome todos ellos de libre distribucion. Ha alguna de estas imagenes les he añadido madificaciones propias.</string>
+        fontawesome todos ellos de libre distribucion. Ha alguna de estas imagenes les he añadido modificaciones propias.</string>
     <string name="Final">Fin</string>
 </resources>

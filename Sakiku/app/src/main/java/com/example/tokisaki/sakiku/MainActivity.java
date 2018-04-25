@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        pantalla=new Inicio(this);
+        pantalla = new Inicio(this);
         getSupportActionBar().hide();
         pantalla.setKeepScreenOn(true);
         setContentView(pantalla);
