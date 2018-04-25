@@ -32,9 +32,13 @@ public class Obstaculos {
      */
     private RectF rectangulo;
     /**
-     * imagen del obstaculo
+     * imagen del obstaculo bola de fuego
      */
-    private Bitmap obstaculo;
+    private Bitmap bolaFuego;
+    /**
+     * imagen del obstaculo bloque de hielo
+     */
+    private Bitmap hielo;
     /**
      * Lista con los frames del obstaculo
      */
@@ -83,6 +87,10 @@ public class Obstaculos {
      * velocidad de movimiento del obstaculo
      */
     private int velocidad = 8;
+    /**
+     * indica si el obstaculo es bola de fuego o bloque de hielo
+     */
+    private boolean bola;
 
     Paint p;
 
@@ -130,28 +138,32 @@ public class Obstaculos {
      * @param context cotexto de la aplicación
      * @param posicion posicion de la bala
      */
-    public Obstaculos(Context context, PointF posicion) {
+    public Obstaculos(Context context, PointF posicion, boolean bola) {
         this.context = context;
         this.posicion = posicion;
-        movimientoObstaculo = new Bitmap[numImagenes_obs];
-        obstaculo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fuego);
-        anchoFrame = obstaculo.getWidth() / numImagenesH_obs;
-        altoFrame = obstaculo.getHeight() / numImagenesV_obs;
-        for (int i = 0; i < numImagenes_obs; i++) {
-            Bitmap frame = Bitmap.createBitmap(obstaculo, cambioH * anchoFrame, cambioV * altoFrame, anchoFrame, altoFrame);
-            ;
-            frame = escalaAltura(frame, getPixels(40));
-            movimientoObstaculo[i] = frame;
-            cambioH++;
-            if (i == 1 || i == 3) {
-                cambioH = 0;
-                cambioV++;
+        this.bola = bola;
+        if(bola) {
+            movimientoObstaculo = new Bitmap[numImagenes_obs];
+            bolaFuego = BitmapFactory.decodeResource(context.getResources(), R.drawable.fuego);
+            anchoFrame = bolaFuego.getWidth() / numImagenesH_obs;
+            altoFrame = bolaFuego.getHeight() / numImagenesV_obs;
+            for (int i = 0; i < numImagenes_obs; i++) {
+                Bitmap frame = Bitmap.createBitmap(bolaFuego, cambioH * anchoFrame, cambioV * altoFrame, anchoFrame, altoFrame);
+                ;
+                frame = escalaAltura(frame, getPixels(40));
+                movimientoObstaculo[i] = espejo(frame, true);
+                cambioH++;
+                if (i == 1 || i == 3) {
+                    cambioH = 0;
+                    cambioV++;
+                }
             }
+            bolaFuego = null;
+            this.posicion.y -= movimientoObstaculo[0].getHeight() / 2;
+        }else {
+            hielo = BitmapFactory.decodeResource(context.getResources(), R.drawable.box);
+            hielo = escalaAltura(hielo, getPixels(40));
         }
-        obstaculo = null;
-        this.posicion.y -= movimientoObstaculo[0].getHeight() / 2;
-
-
         p = new Paint();
         p.setColor(Color.GREEN);
         p.setStyle(Paint.Style.STROKE);
@@ -162,14 +174,23 @@ public class Obstaculos {
      * Actualizamos la física de los elementos en pantalla
      */
     public boolean actualizarFisica(int anchoPantalla) {
-        numFrame++;
-        if (numFrame >= movimientoObstaculo.length) numFrame = 0;
+        if(bola) {
+            numFrame++;
+            if (numFrame >= movimientoObstaculo.length) numFrame = 0;
+        }
         moverObstaculo();
         setRectangulos();
-        if (posicion.x < 0 - movimientoObstaculo[numFrame].getWidth()) {
-            return true;
+        if(bola) {
+            if (posicion.x < 0 - movimientoObstaculo[numFrame].getWidth()) {
+                return true;
+            }
+            return false;
+        }else{
+            if (posicion.x < 0 - hielo.getWidth()) {
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     /***
@@ -198,7 +219,7 @@ public class Obstaculos {
     }
 
     /***
-     * función que mueve la bala
+     * función que mueve el obstaculo
      */
     private void moverObstaculo() {
         posicion.x -= velocidad;
@@ -209,7 +230,7 @@ public class Obstaculos {
      * @param canvas Lienzo sobre el que dibujar
      */
     public void dibujar(Canvas canvas) throws Exception {
-        canvas.drawBitmap(espejo(movimientoObstaculo[numFrame], true), posicion.x, posicion.y, null);
+        canvas.drawBitmap(movimientoObstaculo[numFrame], posicion.x, posicion.y, null);
         canvas.drawRect(rectangulo, p);
     }
 

@@ -98,14 +98,34 @@ public class Jugar extends Escenas {
      */
     private Paint l;
 
+    /**
+     * Instancia de la clase obstaculos
+     */
     private Obstaculos obs;
+    /**
+     * booleana que indica si el personaje esta saltando
+     */
     private boolean salto;
+    /**
+     * booleana que indica si el personaje se esta deslizando
+     */
     private boolean desliz;
+    /**
+     * booleana que indica si se ha finalizado la carrera
+     */
     private boolean finCarrera = false;
+    /**
+     * contador que los contiene 60 segundos que dura la carrera
+     */
     private int contador = 60;
+    /**
+     * contador que le resta una unidad cada segundo a la variable "contador"
+     */
     private long segundo;
 
     private Bitmap disparo; // imagen para el botón de disparar
+
+    private Bitmap disparo2; // imagen para el botón de disparar
 
     /**
      * Posicion del temporizador del juego
@@ -184,6 +204,8 @@ public class Jugar extends Escenas {
         btnDesliz = escalaAnchura(btnDesliz, getPixels(80));
         disparo = BitmapFactory.decodeResource(context.getResources(), R.drawable.senal);
         disparo = escalaAnchura(disparo, getPixels(80));
+        disparo2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.lunafinal);
+        disparo2 = escalaAnchura(disparo2, getPixels(80));
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, true);
         fin = context.getResources().getString(R.string.Final);
@@ -353,6 +375,7 @@ public class Jugar extends Escenas {
                 canvas.drawBitmap(fondo, postI2, 0, null);
                 canvas.drawText("" + contador, posContador.x, posContador.y, l);
                 canvas.drawBitmap(disparo, posDisparo.x, posDisparo.y, null);
+                canvas.drawBitmap(disparo2, anchoPantalla-disparo.getWidth(), 0+disparo2.getHeight(), null);
                 corredor.dibujar(canvas);
                 canvas.drawBitmap(btnDesliz, posBotonDeslizar.x, posBotonDeslizar.y, null);
                 canvas.drawBitmap(btnSalto, posBotonSalto.x, posBotonSalto.y, null);
@@ -386,7 +409,10 @@ public class Jugar extends Escenas {
                         salto = true;
                         corredor.numFrame = 0;
                     } else if (btnDisparoRect.contains(x, y)) {
-                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.movimientoRun[0].getHeight())));
+                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.movimientoRun[0].getHeight()),true));
+                    } else if (x > anchoPantalla - (disparo.getWidth()+disparo2.getWidth()) && x < anchoPantalla &&
+                            y < (0 + disparo2.getHeight())){
+                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla -getPixels(40)),false));
                     }
                 } else {
                     return 1;

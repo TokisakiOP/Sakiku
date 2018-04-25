@@ -13,7 +13,7 @@ public enum eEstadoPersonaje {
      */
     SALTANDO,
     /**
-     * INdica que el personaje esta corriendo
+     * Indica que el personaje esta corriendo
      */
     CORRIENDO
 }
