@@ -42,7 +42,7 @@ public class Principal extends Escenas {
     private String creditos;
 
     /**
-     *icono para ayuda
+     * icono para ayuda
      */
     private String ayuda;
 
@@ -171,9 +171,6 @@ public class Principal extends Escenas {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Principal(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
-        posBx = posBf = poxBy = altoPantalla / 2 - getPixels(50);
-        posBx = anchoPantalla / 2 - getPixels(25);
-        posBf = anchoPantalla / 2 + getPixels(25);
         inicializarRects();
     }
 
@@ -186,17 +183,13 @@ public class Principal extends Escenas {
         creditos = context.getResources().getString(R.string.creditos);
         //ayuda = context.getResources().getString(R.string.help);
         exit = context.getResources().getString(R.string.salir);
-        play = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
-        poxBy += getPixels(50) * 2;
-        cre = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
-        poxBy += getPixels(50) * 2;
-
+        play = new Rect(anchoPantalla / 2 - getPixels(25), altoPantalla / 2 - getPixels(50), anchoPantalla / 2 + getPixels(25), altoPantalla / 2);
+        cre = new Rect(play.left, play.bottom + getPixels(50), play.right, play.bottom + getPixels(100));
 
         //help = new Rect(posBx,poxBy,posBf,poxBy+getPixels(50));
         salir = new Rect(0, 0, getPixels(50), getPixels(50));
         parar = new Rect(0, 0, anchoPantalla, altoPantalla);
         yes = new Rect(anchoPantalla / 2 - getPixels(100), altoPantalla / 2, anchoPantalla / 2 - getPixels(25), altoPantalla / 2 + getPixels(50));
-        //EL RECTANGULO NO ESTA INVERTIDO , TEN CUIDADO CON EL COPI PASTE MUYAYO
         no = new Rect(anchoPantalla / 2 + getPixels(25), altoPantalla / 2, anchoPantalla / 2 + getPixels(100), altoPantalla / 2 + getPixels(50));
         pregunta = context.getResources().getString(R.string.preguntaSalir);
         si = context.getResources().getString(R.string.si);

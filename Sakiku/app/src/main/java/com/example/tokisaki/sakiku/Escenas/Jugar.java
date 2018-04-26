@@ -140,8 +140,6 @@ public class Jugar extends Escenas {
         tiempoMove = System.currentTimeMillis();
         segundo = System.currentTimeMillis() + 1000;
         fondoAnimado = new FondoAnimado(context, anchoPantalla, altoPantalla);
-
-
         //comenzo = true;
         //v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
@@ -223,12 +221,12 @@ public class Jugar extends Escenas {
             canvas.drawText("" + contador, posContador.x, posContador.y, l);
             btnDisparo.dibujar(canvas);
             btnDisparoDos.dibujar(canvas);
-            btnDesliz.dibujar(canvas);
-            btnSalto.dibujar(canvas);
+            corredor.dibujar(canvas);
             for (Obstaculos obs : obstaculos) {
                 obs.dibujar(canvas);
             }
-            corredor.dibujar(canvas);
+            btnDesliz.dibujar(canvas);
+            btnSalto.dibujar(canvas);
         } else {
             canvas.drawColor(Color.BLACK);
             canvas.drawText(fin, posTextoFin.x, posTextoFin.y, l);
@@ -253,8 +251,7 @@ public class Jugar extends Escenas {
                     } else if (btnDisparo.collider.contains(x, y)) {
                         obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.frameActual.getHeight()), true));
                     } else if (btnDisparoDos.collider.contains(x, y)) {
-                        //obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)), false));
-                        //TODO salta excepcion , a revisar
+                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)), false));
                     }
                 } else {
                     return 1;
