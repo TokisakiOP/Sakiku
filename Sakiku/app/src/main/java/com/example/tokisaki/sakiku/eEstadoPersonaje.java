@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku.Enumerados;
+package com.example.tokisaki.sakiku;
 
 /**
  * Define los posibles estados del personaje

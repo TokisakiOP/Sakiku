@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku.Botones;
+package com.example.tokisaki.sakiku;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
