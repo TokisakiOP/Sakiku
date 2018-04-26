@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Modelos;
 
 /**
  * Created by Tokisaki on 15/04/2018.
@@ -9,12 +9,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
+import com.example.tokisaki.sakiku.R;
+import com.example.tokisaki.sakiku.Enumerados.eEstadoPersonaje;
 
 /***
  * Clase que gestiona loe elementos relacionados con el personaje que controlamos
@@ -144,7 +146,7 @@ public class Personaje {
     /**
      * Imagen actual
      */
-    Bitmap frameActual;
+    public Bitmap frameActual;
 
 
     public Personaje(Context context, int altoPantalla, int anchoPantalla) {
