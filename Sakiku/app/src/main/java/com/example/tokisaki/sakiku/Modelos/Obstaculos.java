@@ -195,6 +195,12 @@ public class Obstaculos {
         p.setStrokeWidth(5);
     }
 
+    /**
+     * Dada una animacion recibida como parametro ,
+     * coge uno de los frames de la misma como frame actual
+     *
+     * @param animacion Animacion recibida
+     */
     private void animar(Bitmap[] animacion) {
         numFrame++;
         if (numFrame >= animacion.length) numFrame = 0;
@@ -204,7 +210,7 @@ public class Obstaculos {
     /***
      * Actualizamos la física de los elementos en pantalla
      */
-    public boolean actualizarFisica(int anchoPantalla) {
+    public boolean actualizarFisica() {
         if (bola) {
             animar(movimientoObstaculo);
         }

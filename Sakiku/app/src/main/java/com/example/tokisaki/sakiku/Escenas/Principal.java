@@ -24,16 +24,6 @@ public class Principal extends Escenas {
     /**
      * pincel para las fuentes externas
      */
-    private Paint p;
-
-    /**
-     * pincel para las fuentes externas
-     */
-    private Paint l;
-
-    /**
-     * pincel para las fuentes externas
-     */
     private Paint s;
 
     /**
@@ -181,7 +171,6 @@ public class Principal extends Escenas {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Principal(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
-        int size = getPixels(50);
         posBx = posBf = poxBy = altoPantalla / 2 - getPixels(50);
         posBx = anchoPantalla / 2 - getPixels(25);
         posBf = anchoPantalla / 2 + getPixels(25);

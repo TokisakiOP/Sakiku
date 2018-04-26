@@ -24,16 +24,6 @@ import com.example.tokisaki.sakiku.R;
 public class Creditos extends Escenas {
 
     /**
-     * pincel para el dibujo de las fuentes externa
-     */
-    private Paint p;
-
-    /**
-     * pincel para el dibujo de las fuentes externa
-     */
-    private Paint l;
-
-    /**
      * Layout contenedor de texto
      */
     private StaticLayout layoutDescripcion;

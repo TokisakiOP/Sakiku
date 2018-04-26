@@ -27,110 +27,138 @@ public class Personaje {
      * contexto de la aplicación
      */
     private Context context;
+
     /**
      * número de frames de la acción de saltar
      */
     private int numImagenes_salto = 10;
+
     /**
      * número de frames de la acción de correr
      */
     private int numImagenes_run = 10;
+
     /**
      * número de frames de la acción de deslizarse
      */
     private int numImagenes_desliz = 10;
+
     /**
      * numero de frames horizontales a recortar de la accion correr
      */
     private int numImagenesH_run = 3;
+
     /**
      * numero de frames verticales a recortar de la accion correr
      */
     private int numImagenesV_run = 4;
+
     /**
-     * // numero de frames horizontales a recortar de la accion saltar
+     * numero de frames horizontales a recortar de la accion saltar
      */
     private int numImagenesH_salto = 4;
+
     /**
      * numero de frames verticales a recortar de la accion saltar
      */
     private int numImagenesV_salto = 3;
+
     /**
      * numero de frames horizontales a recortar de la accion deslizarse
      */
     private int numImagenesH_desliz = 3;
+
     /**
      * numero de frames verticales a recortar de la accion deslizarse
      */
     private int numImagenesV_desliz = 4;
+
     /**
      * ancho del frame a recortar
      */
     private int anchoFrame;
+
     /**
      * alto del frame a recortar
      */
     private int altoFrame;
+
     /**
      * cambia la columna del recorte del frame
      */
     private int cambioH = 0;
+
     /**
      * cambia la fila del recorte del frame
      */
     private int cambioV = 0;
+
     /**
      * posicion en el eje X donde esta situado el personaje
      */
-    protected int posX = 0;
+    protected int posX;
+
     /**
      * limite Y variable donde pisa el personaje
      */
     protected int suelo;
+
     /**
      * limite Y fijo donde pisa el personaje
      */
     protected int fijo;
+
     /**
      * numero del frame actual
      */
     protected int numFrame;
+
     /**
      * alto del cuadrado de colisión
      */
     protected int alto;
+
     /**
      * ancho del cuadrado de colisión
      */
     private int ancho;
+
     /**
      * lista con los frames de la accion movimiento horizontal
      */
     protected Bitmap[] movimientoRun;
+
     /**
      * lista con los frames de la accion muerte
      */
     protected Bitmap[] movimientoSalto;
+
     /**
      * lista con los frames de la accion disparo horizontal
      */
     protected Bitmap[] movimientoDesliz;
+
     /**
      * frame con el recorte actual de salto
      */
     private Bitmap salto;
+
     /**
      * frame con el recorte actual de desliz
      */
     private Bitmap desliz;
+
     /**
      * frame con el recorte actual de correr
      */
     private Bitmap run;
+
     /**
      * Array con los cuadrados de colisión
      */
     protected RectF[] rectangulos;
+
+
     //protected boolean muriendo; // booleano que indica si el personaje esta en la acción de morirse
 
     /**
@@ -148,14 +176,20 @@ public class Personaje {
      */
     public Bitmap frameActual;
 
-
+    /**
+     * Inicializa una instancia de la clase segun valores recibodos como parametro
+     *
+     * @param context       Contexto de la aplicacion
+     * @param altoPantalla  Alto de la pantalla
+     * @param anchoPantalla Ancho de la pantalla
+     */
     public Personaje(Context context, int altoPantalla, int anchoPantalla) {
         this.context = context;
         rectangulos = new RectF[2];
         suelo = altoPantalla;
         fijo = altoPantalla;
         posX = anchoPantalla / 2;
-        inicializarElementos();
+        generarAnimaciones();
         p = new Paint();
         p.setColor(Color.RED);
         p.setStyle(Paint.Style.STROKE);
@@ -170,7 +204,6 @@ public class Personaje {
      * @return resultado de comprobacion
      */
     public boolean comprobarVictoria(int anchoPantalla) {
-
         if (posX > anchoPantalla - ancho / 2) return true;
         return false;
     }
@@ -191,7 +224,7 @@ public class Personaje {
     /***
      * Función que inicializa los elementos necesarios en la clase
      */
-    public void inicializarElementos() {
+    public void generarAnimaciones() {
 
         movimientoRun = new Bitmap[numImagenes_run];
         movimientoSalto = new Bitmap[numImagenes_salto];
@@ -257,8 +290,7 @@ public class Personaje {
      */
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {
         if (nuevoAlto == bitmapAux.getHeight()) return bitmapAux;
-        return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) / bitmapAux.getHeight(),
-                nuevoAlto, true);
+        return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) / bitmapAux.getHeight(), nuevoAlto, true);
     }
 
     /***
@@ -281,26 +313,29 @@ public class Personaje {
         alto = frameActual.getHeight();
         float x = posX;
         float y = suelo;
-        rectangulos[0] = new RectF(
-                (int) x + ancho / 3,
-                (int) y - (alto - alto / 8),
-                (int) x + (ancho - ancho / 3),
-                (int) y - alto / 2);
-        rectangulos[1] = new RectF(
-                (int) x + ancho / 6,
-                (int) y - alto / 2,
-                (int) x + (ancho - ancho / 6),
-                (int) y);
+        rectangulos[0] = new RectF((int) x + ancho / 3, (int) y - (alto - alto / 8), (int) x + (ancho - ancho / 3), (int) y - alto / 2);
+        rectangulos[1] = new RectF((int) x + ancho / 6, (int) y - alto / 2, (int) x + (ancho - ancho / 6), (int) y);
     }
 
+    /**
+     * Dada una animacion saca un frame de la misma como frame actual del personaje
+     *
+     * @param animacion Animacion recibida
+     */
     private void animar(Bitmap[] animacion) {
         numFrame++;
         if (numFrame >= animacion.length) numFrame = 0;
         frameActual = animacion[numFrame];
     }
 
+    /**
+     * Dada una animación comprueba si esta ha acabado de mostrarse devolviendo
+     * true si es asi , de lo contrario false
+     *
+     * @param animacion Animacion a comprobar
+     * @return true si ha acabado , de otra manera false
+     */
     private boolean comprobarFinAnimacion(Bitmap[] animacion) {
-
         if (animacion.length - 1 == numFrame) return true;
         return false;
     }
@@ -315,7 +350,6 @@ public class Personaje {
                 break;
             case SALTANDO:
                 if (comprobarFinAnimacion(movimientoSalto)) {
-                    Log.i("Crs", "Fin animacion");
                     this.estado = eEstadoPersonaje.CORRIENDO;
                     suelo = fijo;
                 } else {
@@ -336,6 +370,11 @@ public class Personaje {
     }
 
 
+    /**
+     * Guarda el valor de estado recibido como parametro en la variable
+     * correspondiente
+     * @param estado Estado recibido
+     */
     public void setEstado(eEstadoPersonaje estado) {
         if (this.estado != estado) {
             numFrame = 0;

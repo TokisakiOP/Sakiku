@@ -29,6 +29,16 @@ import com.example.tokisaki.sakiku.R;
 public class Escenas {
 
     /**
+     * pincel para el dibujo de las fuentes externa
+     */
+    protected Paint p;
+
+    /**
+     * pincel para el dibujo de las fuentes externa
+     */
+    protected Paint l;
+
+    /**
      * fuente externa
      */
     protected Typeface letras;

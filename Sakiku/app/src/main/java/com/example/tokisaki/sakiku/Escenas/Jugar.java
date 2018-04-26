@@ -75,16 +75,6 @@ public class Jugar extends Escenas {
     private String fin;
 
     /**
-     * pincel para las fuentes externas
-     */
-    private Paint p;
-
-    /**
-     * pincel para las fuentes externas
-     */
-    private Paint l;
-
-    /**
      * booleana que indica si se ha finalizado la carrera
      */
     private boolean finCarrera = false;
@@ -206,7 +196,7 @@ public class Jugar extends Escenas {
                     tiempoMove = System.currentTimeMillis();
                 }
                 for (Obstaculos obs : obstaculos) {
-                    if (obs.actualizarFisica(anchoPantalla)) {
+                    if (obs.actualizarFisica()) {
                         obstaculos.remove(obs);
                         //Aqui por leer en orden fuerza a esperar a la siguiente ejecucion para seguir trabajando con el resto
                         //si en vez de 50 fps , fueses a 1 , verias el resto de disparos quietos 1 segundo entero :S
