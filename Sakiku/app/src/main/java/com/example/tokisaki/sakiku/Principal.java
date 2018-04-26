@@ -54,9 +54,9 @@ public class Principal extends Escenas {
     private String creditos;
 
     /**
-     *
+     *icono para ayuda
      */
-    private String ayuda; // icono para ayuda
+    private String ayuda;
 
     /**
      * Variable que recogerá "app_name" de strings.xml
@@ -93,7 +93,10 @@ public class Principal extends Escenas {
      */
     private Rect cre;
 
-    private Rect help; // Rectangulo de pulsación para ayuda
+    /**
+     * Rectangulo de pulsación para ayuda
+     */
+    private Rect help;
 
     /**
      * rectangulo e colision para el icono de salir
@@ -106,7 +109,7 @@ public class Principal extends Escenas {
     private Rect parar;
 
     /**
-     * Boton para salir del juego una vez pulsado salir
+     * BotonImagen para salir del juego una vez pulsado salir
      */
     private Rect yes;
 
