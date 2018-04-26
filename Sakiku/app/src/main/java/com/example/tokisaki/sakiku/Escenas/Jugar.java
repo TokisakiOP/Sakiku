@@ -20,7 +20,7 @@ import com.example.tokisaki.sakiku.Modelos.FondoAnimado;
 import com.example.tokisaki.sakiku.Modelos.Obstaculos;
 import com.example.tokisaki.sakiku.Modelos.Personaje;
 import com.example.tokisaki.sakiku.R;
-import com.example.tokisaki.sakiku.eEstadoPersonaje;
+import com.example.tokisaki.sakiku.Enumerados.eEstadoPersonaje;
 
 import java.util.ArrayList;
 

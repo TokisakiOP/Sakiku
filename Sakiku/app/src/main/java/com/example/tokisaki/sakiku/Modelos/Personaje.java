@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
@@ -17,7 +16,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.tokisaki.sakiku.R;
-import com.example.tokisaki.sakiku.eEstadoPersonaje;
+import com.example.tokisaki.sakiku.Enumerados.eEstadoPersonaje;
 
 /***
  * Clase que gestiona loe elementos relacionados con el personaje que controlamos
