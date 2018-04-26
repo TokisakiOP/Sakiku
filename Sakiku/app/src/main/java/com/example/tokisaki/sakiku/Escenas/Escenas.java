@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.

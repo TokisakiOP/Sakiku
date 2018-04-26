@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.
@@ -13,6 +13,8 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
+
+import com.example.tokisaki.sakiku.R;
 
 /***
  * Escena que será el menu principal del juego

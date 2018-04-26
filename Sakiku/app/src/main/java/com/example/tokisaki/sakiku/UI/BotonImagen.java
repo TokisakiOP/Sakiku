@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.UI;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

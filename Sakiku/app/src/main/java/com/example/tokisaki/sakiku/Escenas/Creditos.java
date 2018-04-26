@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.
@@ -15,6 +15,8 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.MotionEvent;
+
+import com.example.tokisaki.sakiku.R;
 
 /***
  * Escena que contiene los créditos del juego

@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.
@@ -14,6 +14,13 @@ import android.graphics.PointF;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
+
+import com.example.tokisaki.sakiku.UI.BotonImagen;
+import com.example.tokisaki.sakiku.Modelos.FondoAnimado;
+import com.example.tokisaki.sakiku.Modelos.Obstaculos;
+import com.example.tokisaki.sakiku.Modelos.Personaje;
+import com.example.tokisaki.sakiku.R;
+import com.example.tokisaki.sakiku.eEstadoPersonaje;
 
 import java.util.ArrayList;
 

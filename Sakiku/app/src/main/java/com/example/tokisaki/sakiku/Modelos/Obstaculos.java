@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Modelos;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,8 +10,9 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
+
+import com.example.tokisaki.sakiku.R;
 
 /**
  * Created by Tokisaki on 15/04/2018.

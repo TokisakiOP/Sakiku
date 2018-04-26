@@ -1,9 +1,11 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Modelos;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+
+import com.example.tokisaki.sakiku.R;
 
 /**
  * Fondo animado de juego

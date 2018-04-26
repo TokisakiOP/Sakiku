@@ -14,6 +14,11 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.tokisaki.sakiku.Escenas.Creditos;
+import com.example.tokisaki.sakiku.Escenas.Escenas;
+import com.example.tokisaki.sakiku.Escenas.Jugar;
+import com.example.tokisaki.sakiku.Escenas.Principal;
+
 /***
  * Clase que hereda de SurfaceView y que manejará todos los cambios en la aplicacion
  */
