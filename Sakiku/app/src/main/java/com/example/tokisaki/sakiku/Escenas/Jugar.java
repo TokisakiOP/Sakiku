@@ -13,8 +13,12 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.tokisaki.sakiku.Modelos.BloqueHielo;
+import com.example.tokisaki.sakiku.Modelos.BolaFuego;
+import com.example.tokisaki.sakiku.Modelos.Obstaculo;
 import com.example.tokisaki.sakiku.UI.BotonImagen;
 import com.example.tokisaki.sakiku.Modelos.FondoAnimado;
 import com.example.tokisaki.sakiku.Modelos.Obstaculos;
@@ -42,7 +46,7 @@ public class Jugar extends Escenas {
     /**
      * lista con los obstaculos que hay en pantalla
      */
-    private ArrayList<Obstaculos> obstaculos;
+    private ArrayList<Obstaculo> obstaculos;
 
     /**
      * tiempo de refresco de pantalla para los frames del disparo del personaje
@@ -193,7 +197,7 @@ public class Jugar extends Escenas {
                     corredor.actualizarFisica();
                     tiempoMove = System.currentTimeMillis();
                 }
-                for (Obstaculos obs : obstaculos) {
+                for (Obstaculo obs : obstaculos) {
                     if (obs.actualizarFisica()) {
                         obstaculos.remove(obs);
                         //Aqui por leer en orden fuerza a esperar a la siguiente ejecucion para seguir trabajando con el resto
@@ -219,10 +223,9 @@ public class Jugar extends Escenas {
             canvas.drawColor(Color.BLUE);
             fondoAnimado.dibujar(canvas);
             canvas.drawText("" + contador, posContador.x, posContador.y, l);
-            btnDisparo.dibujar(canvas);
             btnDisparoDos.dibujar(canvas);
             corredor.dibujar(canvas);
-            for (Obstaculos obs : obstaculos) {
+            for (Obstaculo obs : obstaculos) {
                 obs.dibujar(canvas);
             }
             btnDesliz.dibujar(canvas);
@@ -249,9 +252,9 @@ public class Jugar extends Escenas {
                     } else if (btnSalto.collider.contains(x, y)) {
                         corredor.setEstado(eEstadoPersonaje.SALTANDO);
                     } else if (btnDisparo.collider.contains(x, y)) {
-                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.getTamañoDePìe()), true));
+                        obstaculos.add(new BolaFuego(context, new PointF(anchoPantalla, altoPantalla - corredor.getTamañoDePìe() - getPixels(20))));
                     } else if (btnDisparoDos.collider.contains(x, y)) {
-                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)), false));
+                        obstaculos.add(new BloqueHielo(context, new PointF(anchoPantalla, altoPantalla - getPixels(40))));
                     }
                 } else {
                     return 1;

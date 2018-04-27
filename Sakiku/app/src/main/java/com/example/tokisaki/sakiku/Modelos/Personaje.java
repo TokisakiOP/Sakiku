@@ -368,7 +368,6 @@ public class Personaje {
         setRectangulos();
     }
 
-
     /**
      * Guarda el valor de estado recibido como parametro en la variable
      * correspondiente

@@ -266,12 +266,4 @@ public class Obstaculos {
         canvas.drawBitmap(frameActual, posicion.x, posicion.y, null);
         canvas.drawRect(rectangulo, p);
     }
-
-    /***
-     * Devuelve la posición del rectangulo de colisión de la flecha
-     * @return posición del rectangulo
-     */
-    protected RectF getRectangulo() {
-        return rectangulo;
-    }
 }
