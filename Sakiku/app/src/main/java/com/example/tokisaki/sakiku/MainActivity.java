@@ -44,17 +44,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         pantalla.vuelta();
     }
-
-    /*@Override
-    public void onBackPressed() {
-        if (pantalla.escenaActual.getNumEscena() == 2){
-            Jugar.pause =true;
-        }else if(pantalla.escenaActual.getNumEscena() == 1){
-            Principal.saliendo = true;
-        }else{
-            pantalla.eleccionEscena(1);
-        }
-    }*/
 }
 
 

@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.
@@ -20,10 +20,23 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.example.tokisaki.sakiku.Inicio;
+import com.example.tokisaki.sakiku.R;
+
 /***
  * Clase contenedora de todos los elementos comunes de las escenas
  */
 public class Escenas {
+
+    /**
+     * pincel para el dibujo de las fuentes externa
+     */
+    protected Paint p;
+
+    /**
+     * pincel para el dibujo de las fuentes externa
+     */
+    protected Paint l;
 
     /**
      * fuente externa
@@ -164,7 +177,7 @@ public class Escenas {
      * delvuelve el numero de escena
      * @return numero de la escena actual
      */
-    protected int getNumEscena() {
+    public int getNumEscena() {
         return numEscena;
     }
 

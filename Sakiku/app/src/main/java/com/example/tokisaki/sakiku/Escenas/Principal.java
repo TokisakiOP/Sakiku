@@ -1,37 +1,25 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.MotionEvent;
+
+import com.example.tokisaki.sakiku.R;
 
 /***
  * Escena que será el menu principal del juego
  */
 public class Principal extends Escenas {
-
-    /**
-     * pincel para las fuentes externas
-     */
-    private Paint p;
-
-    /**
-     * pincel para las fuentes externas
-     */
-    private Paint l;
 
     /**
      * pincel para las fuentes externas
@@ -54,9 +42,9 @@ public class Principal extends Escenas {
     private String creditos;
 
     /**
-     *
+     * icono para ayuda
      */
-    private String ayuda; // icono para ayuda
+    private String ayuda;
 
     /**
      * Variable que recogerá "app_name" de strings.xml
@@ -93,7 +81,10 @@ public class Principal extends Escenas {
      */
     private Rect cre;
 
-    private Rect help; // Rectangulo de pulsación para ayuda
+    /**
+     * Rectangulo de pulsación para ayuda
+     */
+    private Rect help;
 
     /**
      * rectangulo e colision para el icono de salir
@@ -106,7 +97,7 @@ public class Principal extends Escenas {
     private Rect parar;
 
     /**
-     * Boton para salir del juego una vez pulsado salir
+     * BotonImagen para salir del juego una vez pulsado salir
      */
     private Rect yes;
 
@@ -180,10 +171,6 @@ public class Principal extends Escenas {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Principal(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
-        int size = getPixels(50);
-        posBx = posBf = poxBy = altoPantalla / 2 - getPixels(50);
-        posBx = anchoPantalla / 2 - getPixels(25);
-        posBf = anchoPantalla / 2 + getPixels(25);
         inicializarRects();
     }
 
@@ -196,17 +183,13 @@ public class Principal extends Escenas {
         creditos = context.getResources().getString(R.string.creditos);
         //ayuda = context.getResources().getString(R.string.help);
         exit = context.getResources().getString(R.string.salir);
-        play = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
-        poxBy += getPixels(50) * 2;
-        cre = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
-        poxBy += getPixels(50) * 2;
-
+        play = new Rect(anchoPantalla / 2 - getPixels(25), altoPantalla / 2 - getPixels(50), anchoPantalla / 2 + getPixels(25), altoPantalla / 2);
+        cre = new Rect(play.left, play.bottom + getPixels(50), play.right, play.bottom + getPixels(100));
 
         //help = new Rect(posBx,poxBy,posBf,poxBy+getPixels(50));
         salir = new Rect(0, 0, getPixels(50), getPixels(50));
         parar = new Rect(0, 0, anchoPantalla, altoPantalla);
         yes = new Rect(anchoPantalla / 2 - getPixels(100), altoPantalla / 2, anchoPantalla / 2 - getPixels(25), altoPantalla / 2 + getPixels(50));
-        //EL RECTANGULO NO ESTA INVERTIDO , TEN CUIDADO CON EL COPI PASTE MUYAYO
         no = new Rect(anchoPantalla / 2 + getPixels(25), altoPantalla / 2, anchoPantalla / 2 + getPixels(100), altoPantalla / 2 + getPixels(50));
         pregunta = context.getResources().getString(R.string.preguntaSalir);
         si = context.getResources().getString(R.string.si);

@@ -1,4 +1,4 @@
-package com.example.tokisaki.sakiku;
+package com.example.tokisaki.sakiku.Escenas;
 
 /**
  * Created by Tokisaki on 15/04/2018.
@@ -9,8 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Layout;
@@ -18,20 +16,12 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.MotionEvent;
 
+import com.example.tokisaki.sakiku.R;
+
 /***
  * Escena que contiene los créditos del juego
  */
 public class Creditos extends Escenas {
-
-    /**
-     * pincel para el dibujo de las fuentes externa
-     */
-    private Paint p;
-
-    /**
-     * pincel para el dibujo de las fuentes externa
-     */
-    private Paint l;
 
     /**
      * Layout contenedor de texto
