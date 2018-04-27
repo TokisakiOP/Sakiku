@@ -158,7 +158,6 @@ public class Personaje {
      */
     protected RectF[] rectangulos;
 
-
     //protected boolean muriendo; // booleano que indica si el personaje esta en la acción de morirse
 
     /**
@@ -373,6 +372,7 @@ public class Personaje {
     /**
      * Guarda el valor de estado recibido como parametro en la variable
      * correspondiente
+     *
      * @param estado Estado recibido
      */
     public void setEstado(eEstadoPersonaje estado) {
@@ -400,5 +400,14 @@ public class Personaje {
      */
     protected RectF[] getRectangulos() {
         return rectangulos;
+    }
+
+    /**
+     * Devuelve la altura del personaje en su estado normal
+     *
+     * @return Altura del personaje
+     */
+    public int getTamañoDePìe() {
+        return movimientoRun[0].getHeight();
     }
 }
