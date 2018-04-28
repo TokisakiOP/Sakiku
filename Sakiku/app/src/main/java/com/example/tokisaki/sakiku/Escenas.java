@@ -29,62 +29,58 @@ public class Escenas {
      * fuente externa
      */
     protected Typeface letras;
-
     /**
      * fuente externa
      */
     protected Typeface faw;
-
+    /**
+     * pincel para el dibujo de las fuentes externa
+     */
+    protected Paint p;
+    /**
+     * pincel para el dibujo de las fuentes externa
+     */
+    protected Paint l;
     /**
      * contexto de la aplicacion
      */
     protected Context context;
-
     /**
      * instancia de la clase inicio
      */
     protected Inicio music;
-
     /**
      * pincel para texto
      */
     protected Paint pTexto;
-
     /**
      * pincel para botones/rectangulos
      */
     protected Paint pBoton;
-
     /**
      * parametro que nos permitirá asignar los sonidos
      */
     protected SoundPool efectos;
-
     /**
      * imagen de fonde de las escenas secundarias
      */
     Bitmap fondo;
-
     /**
      * parametro que nos permite acceder al sonido
      */
     protected AudioManager audioManager;
-
     /**
      * número de escena
      */
     protected int numEscena;
-
     /**
      * maximo de sonidos simultaneos en la aplicación
      */
     final protected int maxSonidosSimultaneos = 10;
-
     /**
      * ancho de la pantalla del dispositivo donde se ejecita la aplicación
      */
     protected int anchoPantalla;
-
     /**
      * alto de la pantalla del dispositivo donde se ejecita la aplicación
      */

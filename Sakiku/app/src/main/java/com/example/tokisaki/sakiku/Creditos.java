@@ -24,16 +24,6 @@ import android.view.MotionEvent;
 public class Creditos extends Escenas {
 
     /**
-     * pincel para el dibujo de las fuentes externa
-     */
-    private Paint p;
-
-    /**
-     * pincel para el dibujo de las fuentes externa
-     */
-    private Paint l;
-
-    /**
      * Layout contenedor de texto
      */
     private StaticLayout layoutDescripcion;

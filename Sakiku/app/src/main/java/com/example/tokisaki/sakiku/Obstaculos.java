@@ -91,7 +91,9 @@ public class Obstaculos {
      * indica si el obstaculo es bola de fuego o bloque de hielo
      */
     private boolean bola;
-
+    /**
+     * Pincel para dibujar rectangulos de colision
+     */
     Paint p;
 
     /***
@@ -149,7 +151,6 @@ public class Obstaculos {
             altoFrame = bolaFuego.getHeight() / numImagenesV_obs;
             for (int i = 0; i < numImagenes_obs; i++) {
                 Bitmap frame = Bitmap.createBitmap(bolaFuego, cambioH * anchoFrame, cambioV * altoFrame, anchoFrame, altoFrame);
-                ;
                 frame = escalaAltura(frame, getPixels(40));
                 movimientoObstaculo[i] = espejo(frame, true);
                 cambioH++;
@@ -173,7 +174,7 @@ public class Obstaculos {
     /***
      * Actualizamos la física de los elementos en pantalla
      */
-    public boolean actualizarFisica(int anchoPantalla) {
+    public boolean actualizarFisica() {
         if(bola) {
             numFrame++;
             if (numFrame >= movimientoObstaculo.length) numFrame = 0;
@@ -207,11 +208,15 @@ public class Obstaculos {
         );
     }
 
-    public boolean detectarColision(Personaje personaje){
-
-
-        for (RectF collider :personaje.getRectangulos()) {
-            if (rectangulo.contains(collider)||rectangulo.intersect(collider)){
+    /**
+     * Comprueba hay colision entre el personaje y el obstaculo
+     *
+     * @param personaje Personaje a comprobar
+     * @return Devuelve true si colisiona en el caso contrario false
+     */
+    public boolean detectarColision(Personaje personaje) {
+        for (RectF r : personaje.getRectangulos()) {
+            if (rectangulo.contains(r) || rectangulo.intersect(r)) {
                 return true;
             }
         }

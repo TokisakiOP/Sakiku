@@ -26,75 +26,53 @@ public class Principal extends Escenas {
     /**
      * pincel para las fuentes externas
      */
-    private Paint p;
-
-    /**
-     * pincel para las fuentes externas
-     */
-    private Paint l;
-
-    /**
-     * pincel para las fuentes externas
-     */
     private Paint s;
-
     /**
      * Pincel que pinta la pantalla de negro
      */
     private Paint start;
-
-    /**
+   /**
      * icono para jugar
      */
     private String jugar;
-
     /**
      * icono para creditos
      */
     private String creditos;
-
     /**
-     *
+     *  icono para ayuda
      */
-    private String ayuda; // icono para ayuda
-
+    private String ayuda;
     /**
      * Variable que recogerá "app_name" de strings.xml
      */
     private String titulo;
-
     /**
      * String con la palabra "si" mostrado como respuesta a la pregunta si deseas salir
      */
     private String si;
-
     /**
      * String con la palabra "no" mostrado como respuesta a la pregunta si deseas salir
      */
     private String nop;
-
     /**
      * icono para salir
      */
     private String exit;
-
     /**
      * String que se muestra cuando pulsas exit y te pregunta si desas salir
      */
     private String pregunta;
-
     /**
      * Rectangulo de pulsación para jugar
      */
     private Rect play;
-
     /**
      * Rectangulo de pulsación para creditos
      */
     private Rect cre;
 
     private Rect help; // Rectangulo de pulsación para ayuda
-
     /**
      * rectangulo e colision para el icono de salir
      */
@@ -104,67 +82,54 @@ public class Principal extends Escenas {
      * rectangulo que se dibuja sobre toda la pantalla al pulsar el botón de salir
      */
     private Rect parar;
-
     /**
      * Boton para salir del juego una vez pulsado salir
      */
     private Rect yes;
-
     /**
      * botón para regresar al juego despues de haber pulsado salir
      */
     private Rect no;
-
     /**
      * Posición left de los rectangulos
      */
     private int posBx;
-
     /**
      * Posición top y bottom de los rectangulos
      */
     private int posBf;
-
     /**
      * Posición right de los rectangulos
      */
     private int poxBy;
-
     /**
      * indica si se esta intentando salir del juego
      */
     protected static boolean saliendo = false;
-
     /**
      * POsicion del titulo
      */
     private Point posTitulo;
-
     /**
      * Posicion de jugar
      */
     private Point posJugar;
-
     /**
      * Posicion de creditos
      */
     private Point posCreditos;
-
     /**
      * Posicion salir
      */
     private Point posSalir;
-
     /**
      * Posicion pregunta salir
      */
     private Point posPregunta;
-
     /**
      * Posicion si
      */
     private Point posSi;
-
     /**
      * POsicion no
      */
@@ -206,7 +171,6 @@ public class Principal extends Escenas {
         salir = new Rect(0, 0, getPixels(50), getPixels(50));
         parar = new Rect(0, 0, anchoPantalla, altoPantalla);
         yes = new Rect(anchoPantalla / 2 - getPixels(100), altoPantalla / 2, anchoPantalla / 2 - getPixels(25), altoPantalla / 2 + getPixels(50));
-        //EL RECTANGULO NO ESTA INVERTIDO , TEN CUIDADO CON EL COPI PASTE MUYAYO
         no = new Rect(anchoPantalla / 2 + getPixels(25), altoPantalla / 2, anchoPantalla / 2 + getPixels(100), altoPantalla / 2 + getPixels(50));
         pregunta = context.getResources().getString(R.string.preguntaSalir);
         si = context.getResources().getString(R.string.si);

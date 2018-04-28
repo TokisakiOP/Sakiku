@@ -130,10 +130,27 @@ public class Personaje {
     protected RectF[] rectangulos;
     //protected boolean muriendo; // booleano que indica si el personaje esta en la acción de morirse
 
+    /**
+     * Indica el estado del personaje mediante un enumerado
+     */
     public eEstadoPersonaje estado;
+    /**
+     * frame actual
+     */
+    Bitmap frameActual;
+    /**
+     * indica la altura del personaje mientras corre
+     */
+    int alturaPersonaje;
 
     Paint p;
 
+    /**
+     * Constructor de la clase
+     * @param context contexto de la aplicación
+     * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
+     * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
+     */
     public Personaje(Context context, int altoPantalla, int anchoPantalla) {
         this.context = context;
         rectangulos = new RectF[2];
@@ -146,7 +163,27 @@ public class Personaje {
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(5);
         estado = eEstadoPersonaje.CORRIENDO;
+        alturaPersonaje = movimientoRun[0].getHeight();
     }
+
+    public boolean ganador(int anchoPantalla) {
+        if (posX > anchoPantalla - ancho / 2) return true;
+        return false;
+    }
+
+    /**
+     * Hace avanzar o retroceder el personaje por la pantalla
+     *
+     * @param avance booleano que indica si se avanza o se retrocede
+     */
+    public void movimiento(boolean avance) {
+        if (avance) {
+            posX += getPixels(1);
+        } else {
+            posX -= getPixels(40);
+        }
+    }
+
 
     /***
      * Función que inicializa los elementos necesarios en la clase
@@ -231,93 +268,78 @@ public class Personaje {
 
     /***
      * Función que actualiza los rectangulos de colisión
-     * @param estado enum que indica que accion se esta ejecutando
      */
-    public void setRectangulos(eEstadoPersonaje estado) {
-        switch (estado) {
-            case CORRIENDO:
-                ancho = movimientoRun[numFrame].getWidth();
-                alto = movimientoRun[numFrame].getHeight();
-                break;
-            case DESLIZANDOSE:
-                ancho = movimientoDesliz[numFrame].getWidth();
-                alto = movimientoDesliz[numFrame].getHeight();
-                break;
-            case SALTANDO:
-                ancho = movimientoSalto[numFrame].getWidth();
-                alto = movimientoSalto[numFrame].getHeight();
-                break;
-        }
+    public void setRectangulos() {
+        ancho = frameActual.getWidth();
+        alto = frameActual.getHeight();
         float x = posX;
         float y = suelo;
         rectangulos[0] = new RectF(
                 (int) x + ancho / 3,
                 (int) y - (alto - alto / 8),
                 (int) x + (ancho - ancho / 3),
-                (int) y - alto / 2
-        );
+                (int) y - alto / 2);
         rectangulos[1] = new RectF(
                 (int) x + ancho / 6,
                 (int) y - alto / 2,
                 (int) x + (ancho - ancho / 6),
-                (int) y
-        );
+                (int) y);
     }
 
     /***
      * Actualizamos la física de los elementos en pantalla
      */
-    public void actualizarFisica(eEstadoPersonaje estado) {
-        this.estado = estado;
+    public void actualizarFisica() {
         switch (estado) {
-            /*case "avanceX":
-                posX += getPixels(3f);
-                setRectangulos("movimientoX");
-                break;*/
-            /*case "retrocesoX":
-                posX-=getPixels(3f);
-                setRectangulos("movimientoXespejo");
-                break;*/
             case CORRIENDO:
                 numFrame++;
                 if (numFrame >= movimientoRun.length) numFrame = 0;
-                setRectangulos(eEstadoPersonaje.CORRIENDO);
+                frameActual = movimientoRun[numFrame];
                 break;
             case SALTANDO:
-                if (numFrame <= 5) {
-                    suelo -= getPixels(10);
+                if (movimientoSalto.length - 1 == numFrame) {
+                    this.estado = eEstadoPersonaje.CORRIENDO;
+                    suelo = fijo;
                 } else {
-                    suelo += getPixels(10);
+                    if (numFrame <= 5) {
+                        suelo -= getPixels(10);
+                    }
                 }
                 numFrame++;
                 if (numFrame >= movimientoSalto.length) numFrame = 0;
-                setRectangulos(eEstadoPersonaje.SALTANDO);
+                frameActual = movimientoSalto[numFrame];
                 break;
             case DESLIZANDOSE:
                 numFrame++;
                 if (numFrame >= movimientoDesliz.length) numFrame = 0;
-                setRectangulos(eEstadoPersonaje.DESLIZANDOSE);
+                frameActual = movimientoDesliz[numFrame];
+                if (movimientoDesliz.length - 1 == numFrame) {
+                    this.estado = eEstadoPersonaje.CORRIENDO;
+                }
                 break;
         }
+        setRectangulos();
     }
 
+
+    /**
+     * Cambia el estado del personaje al pasado por parametro
+     * @param estado estado nuevo del personaje
+     */
+    public void setEstado(eEstadoPersonaje estado) {
+        if (this.estado != estado) {
+            numFrame = 0;
+            suelo = fijo;
+        }
+        this.estado = estado;
+    }
 
     /***
      * Dibujamos los elementos en pantalla
      * @param canvas Lienzo sobre el que dibujar
      */
-    public void dibujar(Canvas canvas) throws Exception {
-        switch (estado) {
-            case CORRIENDO:
-                canvas.drawBitmap(movimientoRun[numFrame], posX, (suelo - movimientoRun[numFrame].getHeight()), null);
-                break;
-            case SALTANDO:
-                canvas.drawBitmap(movimientoSalto[numFrame], posX, (suelo - movimientoSalto[numFrame].getHeight()), null);
-                break;
-            case DESLIZANDOSE:
-                canvas.drawBitmap(movimientoDesliz[numFrame], posX, (suelo - movimientoDesliz[numFrame].getHeight()), null);
-                break;
-        }
+    public void dibujar(Canvas canvas) {
+        canvas.drawBitmap(frameActual, posX, (suelo - frameActual.getHeight()), null);
         canvas.drawRect(rectangulos[0], p);
         canvas.drawRect(rectangulos[1], p);
     }
