@@ -22,79 +22,27 @@ public class Obstaculos {
     /**
      * Contexto de la aplicacion
      */
-    private Context context;
+    protected Context context;
     /**
-     * Posición del obstaculo
+     * Rectangulo de colisión
      */
-    protected PointF posicion;
-    /**
-     * Rectangulo del colisión
-     */
-    private RectF rectangulo;
-    /**
-     * imagen del obstaculo bola de fuego
-     */
-    private Bitmap bolaFuego;
-    /**
-     * imagen del obstaculo bloque de hielo
-     */
-    private Bitmap hielo;
-    /**
-     * Lista con los frames del obstaculo
-     */
-    protected Bitmap[] movimientoObstaculo;
-    /**
-     * numero de frames horizontales a recortar del movimiento del obstaculo
-     */
-    private int numImagenesH_obs = 2;
-    /**
-     * numero de frames verticales a recortar del movimiento del obstaculo
-     */
-    private int numImagenesV_obs = 3;
-    /**
-     * número de frames del recorrido del obstaculo
-     */
-    private int numImagenes_obs = 5;
-    /**
-     * ancho del frame a recortar
-     */
-    private int anchoFrame;
-    /**
-     * alto del frame a recortar
-     */
-    private int altoFrame;
-    /**
-     * cambia la columna del recorte del frame
-     */
-    private int cambioH = 0;
-    /**
-     * cambia la columna del recorte del frame
-     */
-    private int cambioV = 0;
-    /**
-     * numero del frame actual
-     */
-    protected int numFrame;
-    /**
-     * alto del rectangulo de colision
-     */
-    private int alto;
-    /**
-     * ancho del rectangulo de colision
-     */
-    private int ancho;
+    public RectF rectangulo;
     /**
      * velocidad de movimiento del obstaculo
      */
-    private int velocidad = 8;
+    protected int velocidad = 8;
     /**
-     * indica si el obstaculo es bola de fuego o bloque de hielo
+     * Pincel para dibujar los rectangulos
      */
-    private boolean bola;
+    public Paint p;
     /**
-     * Pincel para dibujar rectangulos de colision
+     * Imagen actual del objeto
      */
-    Paint p;
+    Bitmap frame;
+    /**
+     * Posicion del obstaculo
+     */
+    PointF posicion;
 
     /***
      * Reescala una imagen
@@ -120,99 +68,62 @@ public class Obstaculos {
         return (int) (dp * metrics.density);
     }
 
-    /***
-     * Función que aplica visión de espejo a una imagen
-     * @param imagen imagen a aplicar la visión
-     * @param horizontal Booleano que indica si se plicara vertical o horizontalmente
-     * @return imagen transformada
-     */
-    public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
-        Matrix matrix = new Matrix();
-        if (horizontal) matrix.preScale(-1, 1);
-        else matrix.preScale(1, -1);
-        return Bitmap.createBitmap(imagen, 0, 0, imagen.getWidth(),
-                imagen.getHeight(), matrix, false);
-    }
-
-
-    /***
+    /**
      * Constructor de la clase
-     * @param context cotexto de la aplicación
-     * @param posicion posicion de la bala
+     *
+     * @param context  Contexto de la aplicacion
+     * @param posicion Posicion inicial
      */
-    public Obstaculos(Context context, PointF posicion, boolean bola) {
+    public Obstaculos(Context context, PointF posicion) {
         this.context = context;
         this.posicion = posicion;
-        this.bola = bola;
-        if(bola) {
-            movimientoObstaculo = new Bitmap[numImagenes_obs];
-            bolaFuego = BitmapFactory.decodeResource(context.getResources(), R.drawable.fuego);
-            anchoFrame = bolaFuego.getWidth() / numImagenesH_obs;
-            altoFrame = bolaFuego.getHeight() / numImagenesV_obs;
-            for (int i = 0; i < numImagenes_obs; i++) {
-                Bitmap frame = Bitmap.createBitmap(bolaFuego, cambioH * anchoFrame, cambioV * altoFrame, anchoFrame, altoFrame);
-                frame = escalaAltura(frame, getPixels(40));
-                movimientoObstaculo[i] = espejo(frame, true);
-                cambioH++;
-                if (i == 1 || i == 3) {
-                    cambioH = 0;
-                    cambioV++;
-                }
-            }
-            bolaFuego = null;
-            this.posicion.y -= movimientoObstaculo[0].getHeight() / 2;
-        }else {
-            hielo = BitmapFactory.decodeResource(context.getResources(), R.drawable.box);
-            hielo = escalaAltura(hielo, getPixels(40));
-        }
         p = new Paint();
         p.setColor(Color.GREEN);
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(5);
     }
 
-    /***
+    /**
      * Actualizamos la física de los elementos en pantalla
+     * @return devuelve true en caso de que el obsaculo este dentro de la pantalla, si esta fuera de los límites de loa misma devuelve false
      */
     public boolean actualizarFisica() {
-        if(bola) {
-            numFrame++;
-            if (numFrame >= movimientoObstaculo.length) numFrame = 0;
-        }
         moverObstaculo();
-        setRectangulos();
-        if(bola) {
-            if (posicion.x < 0 - movimientoObstaculo[numFrame].getWidth()) {
-                return true;
-            }
-            return false;
-        }else{
-            if (posicion.x < 0 - hielo.getWidth()) {
-                return true;
-            }
-            return false;
+        if (posicion.x < 0 - frame.getWidth()) {
+            return true;
         }
+        return false;
+    }
+
+    /***
+     * Dibujamos los elementos en pantalla
+     * @param canvas Lienzo sobre el que dibujar
+     */
+    public void dibujar(Canvas canvas) {
+        canvas.drawBitmap(frame, posicion.x, posicion.y, null);
+        canvas.drawRect(rectangulo, p);
+    }
+
+    /***
+     * función que mueve el obstaculo
+     */
+    private void moverObstaculo() {
+        posicion.x -= velocidad;
+        setRectangulos();
     }
 
     /***
      * funcion que actualiza el rectangulo de colision
      */
-    private void setRectangulos() {
-        ancho = movimientoObstaculo[numFrame].getWidth();
-        alto = movimientoObstaculo[numFrame].getHeight();
-        rectangulo = new RectF(
-                posicion.x,
-                posicion.y,
-                posicion.x + ancho,
-                posicion.y + alto
-        );
+    protected void setRectangulos() {
+        rectangulo = new RectF(posicion.x, posicion.y, posicion.x + frame.getWidth(), posicion.y + frame.getHeight());
+
     }
 
     /**
-     * Comprueba hay colision entre el personaje y el obstaculo
-     *
+     * Comprueba si hay colision entre el obstaculo y el personaje pasado como parametro
      * @param personaje Personaje a comprobar
-     * @return Devuelve true si colisiona en el caso contrario false
+     * @return Devuelve true si colisiona en caso contrario false
      */
     public boolean detectarColision(Personaje personaje) {
         for (RectF r : personaje.getRectangulos()) {
@@ -221,29 +132,5 @@ public class Obstaculos {
             }
         }
         return false;
-    }
-
-    /***
-     * función que mueve el obstaculo
-     */
-    private void moverObstaculo() {
-        posicion.x -= velocidad;
-    }
-
-    /***
-     * Dibujamos los elementos en pantalla
-     * @param canvas Lienzo sobre el que dibujar
-     */
-    public void dibujar(Canvas canvas) throws Exception {
-        canvas.drawBitmap(movimientoObstaculo[numFrame], posicion.x, posicion.y, null);
-        canvas.drawRect(rectangulo, p);
-    }
-
-    /***
-     * Devuelve la posición del rectangulo de colisión de la flecha
-     * @return posición del rectangulo
-     */
-    protected RectF getRectangulo() {
-        return rectangulo;
     }
 }

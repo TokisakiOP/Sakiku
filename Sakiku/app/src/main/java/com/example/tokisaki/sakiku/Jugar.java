@@ -242,9 +242,9 @@ public class Jugar extends Escenas {
                     } else if (btnSalto.rButton.contains(x, y)) {
                         corredor.setEstado(eEstadoPersonaje.SALTANDO);
                     } else if (btnDisparo.rButton.contains(x, y)) {
-                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje), true));
+                        obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
                     } else if (btnDisparoDos.rButton.contains(x, y)) {
-                        obstaculos.add(new Obstaculos(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)), false));
+                        obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
                     }
                 } else {
                     return 1;
