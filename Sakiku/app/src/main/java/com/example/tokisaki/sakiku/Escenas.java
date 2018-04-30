@@ -44,7 +44,7 @@ public class Escenas {
     /**
      * contexto de la aplicacion
      */
-    protected Context context;
+    protected static Context context = null;
     /**
      * instancia de la clase inicio
      */

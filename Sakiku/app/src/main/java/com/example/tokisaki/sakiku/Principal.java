@@ -246,11 +246,13 @@ public class Principal extends Escenas {
             case MotionEvent.ACTION_POINTER_UP:
                 if (!saliendo) {
                     if (play.contains(x, y)) {
+                        Cliente myATaskYW = new Cliente();
+                        myATaskYW.execute("libro");
                         return 2;
                     } else if (cre.contains(x, y)) {
                         return 3;
-                                                                    /*} else if (help.contains((int) event.getX(), (int) event.getY())) {
-                                                                        return 6;*/
+                        /*} else if (help.contains((int) event.getX(), (int) event.getY())) {
+                                  return 6;*/
                     } else if (salir.contains(x, y)) {
                         saliendo = true;
                     }
