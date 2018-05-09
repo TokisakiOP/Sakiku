@@ -93,7 +93,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * instancia de la clase escena
      */
-    protected Escenas escenaActual;
+    protected  static Escenas escenaActual;
     /**
      * manejador del audio
      */

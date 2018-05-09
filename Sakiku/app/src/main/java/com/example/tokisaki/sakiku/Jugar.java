@@ -42,10 +42,7 @@ public class Jugar extends Escenas {
      * indica el intervalo de tiempo en el que se actualizan los frames
      */
     private long tiempoMove;
-    /**
-     * lista con los obstaculos que hay en pantalla
-     */
-    private ArrayList<Obstaculos> obstaculos;
+
 
     private int tickDisparoFrame = 40; // tiempo de refresco de pantalla para los frames del disparo del personaje
     private int puntuacion = 0; // puntuación conseguida
@@ -75,11 +72,11 @@ public class Jugar extends Escenas {
     /**
      * booleana que indica si se ha finalizado la carrera
      */
-    private boolean finCarrera = false;
+    protected static boolean finCarrera;
     /**
      * contador que los contiene 60 segundos que dura la carrera
      */
-    private int contador = 60;
+    private int contador;
     /**
      * contador que le resta una unidad cada segundo a la variable "contador"
      */
@@ -133,6 +130,11 @@ public class Jugar extends Escenas {
         parallax = new Parallax(context, anchoPantalla, altoPantalla);
         tiempoMove = System.currentTimeMillis();
         segundo = System.currentTimeMillis() + 1000;
+        contador = 60;
+        finCarrera = false;
+
+        Cliente myATaskYW = new Cliente(Inicio.escenaActual , context);
+        myATaskYW.execute("libro");
         //comenzo = true;
         //v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
@@ -175,7 +177,7 @@ public class Jugar extends Escenas {
                 finCarrera = true;
             } else {
                 parallax.actualizarFisica();
-                corredor.movimiento(true);
+                //corredor.movimiento(true);
                 if (System.currentTimeMillis() > segundo) {
                     contador--;
                     segundo = System.currentTimeMillis() + 1000;
@@ -259,6 +261,8 @@ public class Jugar extends Escenas {
         }
         return numEscena;
     }
+
+
 }
 
 

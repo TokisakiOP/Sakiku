@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -17,8 +18,11 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+
+import java.util.ArrayList;
 
 /***
  * Clase contenedora de todos los elementos comunes de las escenas
@@ -44,7 +48,7 @@ public class Escenas {
     /**
      * contexto de la aplicacion
      */
-    protected static Context context = null;
+    protected  Context context;
     /**
      * instancia de la clase inicio
      */
@@ -95,6 +99,11 @@ public class Escenas {
     protected int alienEntrada; // sonido de entrada de ua bola en concreto
     protected int pasos; // sonido de pisadas*/
 
+
+    /**
+     * lista con los obstaculos que hay en pantalla
+     */
+    protected ArrayList<Obstaculos> obstaculos;
 
     /***
      * Constructor de la clase
@@ -177,6 +186,15 @@ public class Escenas {
      */
     public void actualizarFisica() {
 
+    }
+
+    protected void crearObstaculos(String obstaculo){
+        Log.i("prueba","ZZZZZZZZZZZ = " +obstaculo);
+        if(obstaculo.equals("bloque")){
+            obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
+        }else if(obstaculo.equals("bola")){
+            obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - getPixels(80))));
+        }
     }
 
     /***
