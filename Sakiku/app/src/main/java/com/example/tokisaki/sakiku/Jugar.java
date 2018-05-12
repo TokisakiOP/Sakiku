@@ -42,7 +42,10 @@ public class Jugar extends Escenas {
      * indica el intervalo de tiempo en el que se actualizan los frames
      */
     private long tiempoMove;
-
+    /**
+     * lista con los obstaculos que hay en pantalla
+     */
+    protected ArrayList<Obstaculos> obstaculos;
 
     private int tickDisparoFrame = 40; // tiempo de refresco de pantalla para los frames del disparo del personaje
     private int puntuacion = 0; // puntuación conseguida
@@ -125,15 +128,15 @@ public class Jugar extends Escenas {
     public Jugar(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
         inicializar();
-        obstaculos = new ArrayList<>();
         corredor = new Personaje(context, altoPantalla, anchoPantalla);
         parallax = new Parallax(context, anchoPantalla, altoPantalla);
         tiempoMove = System.currentTimeMillis();
         segundo = System.currentTimeMillis() + 1000;
         contador = 60;
         finCarrera = false;
+        obstaculos = new ArrayList<>();
 
-        Cliente myATaskYW = new Cliente(Inicio.escenaActual , context);
+        Cliente myATaskYW = new Cliente(context,this);
         myATaskYW.execute("libro");
         //comenzo = true;
         //v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -214,7 +217,9 @@ public class Jugar extends Escenas {
                 btnDisparo.dibujar(canvas);
                 btnDisparoDos.dibujar(canvas);
                 corredor.dibujar(canvas);
+                Log.i("prueba","obs = " + obstaculos.size());
                 for (Obstaculos obs : obstaculos) {
+                    Log.i("prueba","XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                     obs.dibujar(canvas);
                 }
                 btnDesliz.dibujar(canvas);
@@ -262,6 +267,16 @@ public class Jugar extends Escenas {
         return numEscena;
     }
 
+    protected void crearObstaculos(String obstaculo){
+        Log.i("prueba","ZZZZZZZZZZZ = " +obstaculo);
+        if(obstaculo.equals("bloque")){
+            Log.i("prueba","BBBBBBBBBBBBBB = " +obstaculo);
+            obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
+        }else if(obstaculo.equals("bola")){
+            Log.i("prueba","FFFFFFFFFFFFFFFFFFF = " +obstaculo);
+            obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
+        }
+    }
 
 }
 

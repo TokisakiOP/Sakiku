@@ -246,7 +246,6 @@ public class Principal extends Escenas {
             case MotionEvent.ACTION_POINTER_UP:
                 if (!saliendo) {
                     if (play.contains(x, y)) {
-
                         return 2;
                     } else if (cre.contains(x, y)) {
                         return 3;

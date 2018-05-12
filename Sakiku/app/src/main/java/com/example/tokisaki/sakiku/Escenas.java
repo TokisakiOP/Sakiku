@@ -100,11 +100,6 @@ public class Escenas {
     protected int pasos; // sonido de pisadas*/
 
 
-    /**
-     * lista con los obstaculos que hay en pantalla
-     */
-    protected ArrayList<Obstaculos> obstaculos;
-
     /***
      * Constructor de la clase
      * @param numEscena numero de la escena
@@ -125,6 +120,9 @@ public class Escenas {
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, true);
         faw = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
         letras = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
+
+        //obstaculos = new ArrayList<>();
+
     }
 
     /***
@@ -186,15 +184,6 @@ public class Escenas {
      */
     public void actualizarFisica() {
 
-    }
-
-    protected void crearObstaculos(String obstaculo){
-        Log.i("prueba","ZZZZZZZZZZZ = " +obstaculo);
-        if(obstaculo.equals("bloque")){
-            obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
-        }else if(obstaculo.equals("bola")){
-            obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - getPixels(80))));
-        }
     }
 
     /***
