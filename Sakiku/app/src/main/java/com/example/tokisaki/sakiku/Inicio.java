@@ -134,14 +134,14 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     /***
      * Funcion que inicializa la música de la aplicacion
      */
-    /*protected void creoMusica() {
+    protected void creoMusica() {
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         v = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        //mediaPlayer = MediaPlayer.create(context, R.raw.soundtrack);
+        mediaPlayer = MediaPlayer.create(context, R.raw.menu);
         mediaPlayer.setVolume(v / 2, v / 2);
-        //musicaJuego = MediaPlayer.create(context, R.raw.jugar);
+        musicaJuego = MediaPlayer.create(context, R.raw.carrera);
         musicaJuego.setVolume(v / 2, v / 2);
-    }*/
+    }
 
     /***
      * Registra las pulsaciones en pantalla
@@ -151,7 +151,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         nuevaEscena = escenaActual.onTouchEvent(event);
-        //mediaPlayer.pause();
+        mediaPlayer.pause();
         if (nuevaEscena != escenaActual.getNumEscena()) {
             switch (nuevaEscena) {
                 case 1:
@@ -174,8 +174,8 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      */
     protected void enPausa() {
         funcionando = false;
-        /*if(jugando)musicaJuego.pause();
-        else mediaPlayer.pause();*/
+        if(jugando)musicaJuego.pause();
+        else mediaPlayer.pause();
         try {
             hilo.join();
         } catch (InterruptedException e) {

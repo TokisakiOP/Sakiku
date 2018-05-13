@@ -75,7 +75,7 @@ public class Jugar extends Escenas {
     /**
      * booleana que indica si se ha finalizado la carrera
      */
-    protected static boolean finCarrera;
+    protected boolean finCarrera;
     /**
      * contador que los contiene 60 segundos que dura la carrera
      */

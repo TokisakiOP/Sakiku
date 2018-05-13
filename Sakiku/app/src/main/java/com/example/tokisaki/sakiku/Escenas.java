@@ -89,15 +89,30 @@ public class Escenas {
      * alto de la pantalla del dispositivo donde se ejecita la aplicación
      */
     protected int altoPantalla;
-    /*protected int sonidoDisparo; // sonido de disparo del personaje
-    protected int sonidoBote; // sonido del bote de una bola
-    protected int sonidoEntrada; // sonido de entrada de ua bola en concreto
-    protected int sonidoExplosion; // sonido de cuando se impacta con una bala en una bola
-    protected int sonidoExplosionFinal; // sonido de desaparición de una bola
-    protected int gameover; // sonido de final de juego
-    protected int alien; // sonido de entrada de ua bola en concreto
-    protected int alienEntrada; // sonido de entrada de ua bola en concreto
-    protected int pasos; // sonido de pisadas*/
+    /**
+     * sonido de salto del personaje
+     */
+    protected int sonidoSalto;
+    /**
+     * sonido del desliz del personaje
+     */
+    protected int sonidoDesliz;
+    /**
+     * sonido de comienzo de la carrera
+     */
+    protected int sonidoStart;
+    /**
+     * sonido de salida de una bola de fuego
+     */
+    protected int sonidoFuego;
+    /**
+     * sonido de salida de un bloque de hielo
+     */
+    protected int sonidoHielo;
+    /**
+     * sonido de pisadas
+     */
+    protected int pasos;
 
 
     /***
@@ -120,9 +135,6 @@ public class Escenas {
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, true);
         faw = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
         letras = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
-
-        //obstaculos = new ArrayList<>();
-
     }
 
     /***
@@ -152,15 +164,12 @@ public class Escenas {
         } else {
             this.efectos = new SoundPool(maxSonidosSimultaneos, AudioManager.STREAM_MUSIC, 0);
         }
-        /*sonidoDisparo = efectos.load(context,R.raw.disparo,1);
-        sonidoBote = efectos.load(context,R.raw.bote,1);
-        sonidoEntrada = efectos.load(context,R.raw.entrada,1);
-        sonidoExplosion = efectos.load(context,R.raw.explosion,1);
-        sonidoExplosionFinal = efectos.load(context,R.raw.explosion_final,1);
-        gameover = efectos.load(context,R.raw.gameover,1);
-        alienEntrada = efectos.load(context,R.raw.entrada_alien,1);
-        alien = efectos.load(context,R.raw.alien,1);
-        pasos = efectos.load(context,R.raw.pisadas,1);*/
+        sonidoDesliz = efectos.load(context,R.raw.desliz,1);
+        sonidoFuego = efectos.load(context,R.raw.fuego,1);
+        sonidoHielo = efectos.load(context,R.raw.hielo,1);
+        sonidoSalto = efectos.load(context,R.raw.salto,1);
+        sonidoStart = efectos.load(context,R.raw.start,1);
+        pasos = efectos.load(context,R.raw.pisadas,1);
     }
 
     /***

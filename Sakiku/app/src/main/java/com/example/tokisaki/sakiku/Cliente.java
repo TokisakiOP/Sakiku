@@ -66,7 +66,7 @@ public class Cliente extends AsyncTask<String,Void,String> {
                 String received = null;
                 InputStream stream = null;
                 Log.i("I/TCP Client", "Received data to server");
-                while(Jugar.finCarrera == false) {
+                while(juego.finCarrera == false) {
                     Log.i("prueba","@@@@@@@@@@@@");
                     stream = socket.getInputStream();
                     byte[] lenBytes = new byte[256];
