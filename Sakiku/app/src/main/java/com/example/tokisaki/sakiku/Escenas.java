@@ -113,6 +113,10 @@ public class Escenas {
      * sonido de pisadas
      */
     protected int pasos;
+    /**
+     * sonido de choque de un personaje con un obstaculo
+     */
+    protected int golpe;
 
 
     /***
@@ -152,7 +156,6 @@ public class Escenas {
     /***
      * Inicializa la musica y los efectos que su usaran en el juego
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void inicializarMusica() {
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if ((android.os.Build.VERSION.SDK_INT) >= 21) {
@@ -170,6 +173,7 @@ public class Escenas {
         sonidoSalto = efectos.load(context,R.raw.salto,1);
         sonidoStart = efectos.load(context,R.raw.start,1);
         pasos = efectos.load(context,R.raw.pisadas,1);
+        golpe = efectos.load(context,R.raw.gruntsound,1);
     }
 
     /***

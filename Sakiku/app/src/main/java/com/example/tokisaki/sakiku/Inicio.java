@@ -113,7 +113,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * booleano que indica si se esta jugando
      */
-    boolean jugando = false;
+    static boolean jugando = false;
 
 
     /***
@@ -127,7 +127,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         this.surfaceHolder.addCallback(this);
         hilo = new Hilo();
         setFocusable(true);
-        // creoMusica();
+        creoMusica();
 
     }
 
@@ -164,7 +164,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                     eleccionEscena(3);
                     break;
             }
-            //audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
+            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
         }
         return true;
     }
@@ -189,6 +189,8 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      */
     protected void vuelta() {
         funcionando = true;
+        if(jugando)musicaJuego.start();
+        else mediaPlayer.start();
         hilo = new Hilo();
         hilo.start();
     }
@@ -247,6 +249,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                 hilo = new Hilo();
                 hilo.start();
             }
+            mediaPlayer.start();
         }
     }
 

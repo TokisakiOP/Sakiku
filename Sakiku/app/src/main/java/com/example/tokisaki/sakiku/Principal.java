@@ -18,6 +18,8 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import static com.example.tokisaki.sakiku.Inicio.jugando;
+
 /***
  * Escena que será el menu principal del juego
  */
@@ -150,6 +152,9 @@ public class Principal extends Escenas {
         posBx = anchoPantalla / 2 - getPixels(25);
         posBf = anchoPantalla / 2 + getPixels(25);
         inicializarRects();
+        if(jugando)Inicio.musicaJuego.stop();
+        Inicio.mediaPlayer.start();
+
     }
 
     /***

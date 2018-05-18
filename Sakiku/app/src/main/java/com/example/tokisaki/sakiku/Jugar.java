@@ -55,7 +55,7 @@ public class Jugar extends Escenas {
      */
     private int tickMove = 30;
     private int v; // volumen de la música
-    private int pasear = 0; // numero que calcula cada cuantos frames suena el sonido de las pisadas
+    private int pasear; // numero que calcula cada cuantos frames suena el sonido de las pisadas
     /**
      * String que se muestra una vez que acaba la carrera
      */
@@ -128,6 +128,8 @@ public class Jugar extends Escenas {
     public Jugar(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
         super(numEscena, context, anchoPantalla, altoPantalla);
         inicializar();
+        Inicio.mediaPlayer.stop();
+        Inicio.musicaJuego.start();
         corredor = new Personaje(context, altoPantalla, anchoPantalla);
         parallax = new Parallax(context, anchoPantalla, altoPantalla);
         tiempoMove = System.currentTimeMillis();
@@ -135,7 +137,7 @@ public class Jugar extends Escenas {
         contador = 60;
         finCarrera = false;
         obstaculos = new ArrayList<>();
-
+        pasear = 0;
         Cliente myATaskYW = new Cliente(context,this);
         myATaskYW.execute("libro");
         //comenzo = true;
@@ -188,6 +190,8 @@ public class Jugar extends Escenas {
                 if (System.currentTimeMillis() - tiempoMove > tickMove) {
                     corredor.actualizarFisica();
                     tiempoMove = System.currentTimeMillis();
+                    pasear++;
+                    if (pasear % 4 == 0) efectos.play(pasos, v, v, 1, 0, 1);
                 }
                 for (Obstaculos obs : obstaculos) {
                     if (obs.actualizarFisica()) {
@@ -198,6 +202,7 @@ public class Jugar extends Escenas {
                         obstaculos.remove(obs);
                         corredor.movimiento(false);
                         corredor.setRectangulos();
+                        efectos.play(golpe, v, v, 1, 0, 1);
                     }
                 }
             }
@@ -217,9 +222,7 @@ public class Jugar extends Escenas {
                 btnDisparo.dibujar(canvas);
                 btnDisparoDos.dibujar(canvas);
                 corredor.dibujar(canvas);
-                Log.i("prueba","obs = " + obstaculos.size());
                 for (Obstaculos obs : obstaculos) {
-                    Log.i("prueba","XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                     obs.dibujar(canvas);
                 }
                 btnDesliz.dibujar(canvas);
@@ -246,14 +249,18 @@ public class Jugar extends Escenas {
                 if (!finCarrera) {
                     if (btnDesliz.rButton.contains(x, y)) {
                         corredor.setEstado(eEstadoPersonaje.DESLIZANDOSE);
+                        efectos.play(sonidoDesliz,v,v,1,0,1 );
                     } else if (btnSalto.rButton.contains(x, y)) {
                         corredor.setEstado(eEstadoPersonaje.SALTANDO);
+                        efectos.play(sonidoSalto,v,v,1,0,1 );
                     } else if (btnDisparo.rButton.contains(x, y)) {
                         obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
                     } else if (btnDisparoDos.rButton.contains(x, y)) {
                         obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
                     }
                 } else {
+                    Inicio.musicaJuego.stop();
+                    Inicio.mediaPlayer.start();
                     return 1;
                 }
                 break;
@@ -268,13 +275,12 @@ public class Jugar extends Escenas {
     }
 
     protected void crearObstaculos(String obstaculo){
-        Log.i("prueba","ZZZZZZZZZZZ = " +obstaculo);
         if(obstaculo.equals("bloque")){
-            Log.i("prueba","BBBBBBBBBBBBBB = " +obstaculo);
             obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
+            efectos.play(sonidoHielo,v,v,1,0,1 );
         }else if(obstaculo.equals("bola")){
-            Log.i("prueba","FFFFFFFFFFFFFFFFFFF = " +obstaculo);
             obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
+            efectos.play(sonidoFuego,v,v,1,0,1 );
         }
     }
 
