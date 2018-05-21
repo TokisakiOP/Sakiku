@@ -117,6 +117,10 @@ public class Escenas {
      * sonido de choque de un personaje con un obstaculo
      */
     protected int golpe;
+    /**
+     * instancia de la clase info
+     */
+    Info info;
 
 
     /***
@@ -125,13 +129,15 @@ public class Escenas {
      * @param context contexto de la aplicación
      * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
      * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
+     * @param info Instancia de la clase Info
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public Escenas(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
+    public Escenas(int numEscena, Context context, int anchoPantalla, int altoPantalla,Info info) {
         this.context = context;
         this.numEscena = numEscena;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
+        this.info = info;
         inicializarPaints();
         inicializarMusica();
         music = new Inicio(context);

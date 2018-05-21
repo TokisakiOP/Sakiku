@@ -3,6 +3,12 @@
     <string name="play" translatable="false">&#xf152;</string>
     <string name="creditos" translatable="false">&#xf1ea;</string>
     <string name="salir" translatable="false">&#xf00d;</string>
+    <string name="help" translatable="false">&#xf128;</string>
+    <string name="character" translatable="false">&#xf118;</string>
+    <string name="indiana" translatable="false">&#xf05b;</string>
+    <string name="robot" translatable="false">&#xf085;</string>
+    <string name="ninja" translatable="false">&#xf1e2;</string>
+    <string name="configuracion" translatable="false">&#xf013;</string>
     <string name="si">Si</string>
     <string name="no">No</string>
     <string name="preguntaSalir">Salir del juego ?</string>
@@ -10,4 +16,15 @@
     <string name="creditosTexto">Los frames respectivos al robot los he sacado de gameart2d, la música de opengameart, las imagenes de pixbay y las fuentes tanto de fontlibrary como de
         fontawesome todos ellos de libre distribucion. Ha alguna de estas imagenes les he añadido modificaciones propias.</string>
     <string name="Final">Fin</string>
+    <string name="vibrar">Vibracion</string>
+    <string name="musica">Musica</string>
+    <string name="efectos">Efectos</string>
+    <string name="sonido_on" translatable="false">&#xf0f3;</string>
+    <string name="sonido_off" translatable="false">&#xf1f6;</string>
+    <string name="ayuda">ayuda</string>
+    <string name="ayudaTexto">El objetivo de este juego es aguantar el maximo tiempo posible vivo, por lo que la muerte supone el fin del juego.
+    Moveras al robot con las señales de direccion situadas en la parte inferior izquierda de tu telefono, a su vez dispararas con la señal de disparo en la esquina inferior derecha.
+    Recuerda dejar que el robot realice la accion completa si no no podra preparar el disparo. Eso es todo a matar aliens !!!!</string>
+    <string name="eleccion">Elija el personaje</string>
+    <string name="elegido">Actual = </string>
 </resources>

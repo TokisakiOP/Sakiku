@@ -1,6 +1,0 @@
-C:\Users\Tokisaki\source\repos\ServidorProyecto\ClienteProyecto\bin\Debug\ClienteProyecto.exe.config
-C:\Users\Tokisaki\source\repos\ServidorProyecto\ClienteProyecto\bin\Debug\ClienteProyecto.exe
-C:\Users\Tokisaki\source\repos\ServidorProyecto\ClienteProyecto\bin\Debug\ClienteProyecto.pdb
-C:\Users\Tokisaki\source\repos\ServidorProyecto\ClienteProyecto\obj\Debug\ClienteProyecto.csproj.CoreCompileInputs.cache
-C:\Users\Tokisaki\source\repos\ServidorProyecto\ClienteProyecto\obj\Debug\ClienteProyecto.exe
-C:\Users\Tokisaki\source\repos\ServidorProyecto\ClienteProyecto\obj\Debug\ClienteProyecto.pdb

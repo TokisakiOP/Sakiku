@@ -21,6 +21,7 @@ namespace ServidorProyecto
             bool enEjecucion = true;
             IPEndPoint ie = new IPEndPoint(IPAddress.Any, puerto);
             Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            s.Bind(ie);
             s.Listen(10);
             Socket jugadores = null;
 
@@ -45,7 +46,7 @@ namespace ServidorProyecto
             StreamWriter sw = new StreamWriter(ns);
             if (usuario != "" && usuario != null)
             {
-                sw.WriteLine("Bienvenido al juego");
+                sw.WriteLine("Bienvenido al juego"); // activador
                 sw.Flush();
                 lock (l)
                 {
@@ -53,76 +54,75 @@ namespace ServidorProyecto
                     lista.Add(sw);
                 }
                 Console.WriteLine("Ha iniciado sesion " + usuario);
-                foreach (StreamWriter stream in lista)
-                {
-                    if (stream != sw)
-                    {
-                        stream.WriteLine("Se ha conectado : " + usuario);
-                        stream.Flush();
-                    }
-                }
 
                 while (activo)
                 {
                     try
                     {
+                        Console.WriteLine("hola");
                         mensaje = sr.ReadLine();
                     }
                     catch (IOException)
                     {
-                        mensaje = "#salir";
+                        mensaje = "desconectado";
                     }
                     if (mensaje == null)
                     {
-                        mensaje = "#salir";
+                        mensaje = "desconectado";
                     }
-                    switch (mensaje)
+                    Console.WriteLine(mensaje);
+                    if (mensaje == "conectado")
                     {
-                        case "#lista":
-                            sw.WriteLine("Usuarios online :");
+                        mensaje = lanzamientoObstaculos();
+                        Console.WriteLine(mensaje);
+                        try
+                        {
+                            sw.WriteLine(mensaje);
                             sw.Flush();
-                            foreach (string usu in usuarios)
-                            {
-                                if (usu != usuario)
-                                {
-                                    sw.WriteLine("Usuario : " + usu);
-                                    sw.Flush();
-                                }
-                            }
-                            break;
-                        case "#salir":
-                            foreach (StreamWriter stream in lista)
-                            {
-                                if (stream != sw && stream != null)
-                                {
-                                    stream.WriteLine(usuario + " ha salido");
-                                    stream.Flush();
-                                }
-                            }
-
-                            if (ns != null) ns.Close();
-                            if (sr != null) sr.Close();
-                            lock (l)
-                            {
-                                lista.RemoveAt(usuarios.IndexOf(usuario));
-                                usuarios.Remove(usuario);
-                            }
-                            activo = false;
-                            player.Close();
-                            break;
-                        default:
-                            foreach (StreamWriter stream in lista)
-                            {
-                                if (stream != sw)
-                                {
-                                    stream.WriteLine(mensaje);
-                                    stream.Flush();
-                                }
-                            }
-                            break;
+                            Thread.Sleep(1000);
+                        }
+                        catch (System.IO.IOException)
+                        {
+                            mensaje = "desconectado";
+                        }
                     }
+                    if (mensaje == "desconectado")
+                    {
+                        if (ns != null) ns.Close();
+                        if (sr != null) sr.Close();
+                        lock (l)
+                        {
+                            lista.RemoveAt(usuarios.IndexOf(usuario));
+                            usuarios.Remove(usuario);
+                        }
+                        activo = false;
+                        player.Close();
+                    }
+                    
                 }
             }
+        }
+        static Random random = new Random();
+        public static string lanzamientoObstaculos()
+        {
+            string mensaje = "";
+            int randomNumber = random.Next(0, 100);
+            if (randomNumber < 33)
+            {
+                mensaje = "bola";
+                Console.WriteLine("1");
+            }
+            else if (randomNumber < 66)
+            {
+                mensaje = "bloque";
+                Console.WriteLine("2");
+            }
+            else
+            {
+                mensaje = "nada";
+                Console.WriteLine("3");
+            }
+            return mensaje;
         }
     }
 }

@@ -73,8 +73,10 @@ public class Principal extends Escenas {
      * Rectangulo de pulsación para creditos
      */
     private Rect cre;
-
-    private Rect help; // Rectangulo de pulsación para ayuda
+    /**
+     * Rectangulo de pulsación para ayuda
+     */
+    private Rect help;
     /**
      * rectangulo e colision para el icono de salir
      */
@@ -133,9 +135,53 @@ public class Principal extends Escenas {
      */
     private Point posSi;
     /**
-     * POsicion no
+     * Posicion no
      */
     private Point posNo;
+    /**
+     * icono para configuración
+     */
+    private String configuracion;
+    /**
+     * Rectangulo de pulsación para configuración
+     */
+    private Rect confi;
+    /**
+     * Posicion ayuda
+     */
+    private Point posAyuda;
+    /**
+     * Posicion configuracion
+     */
+    private Point posConfi;
+    /**
+     * posicion lateral del boton de configuracion
+     */
+    private int posLatConfi_l;
+    /**
+     * posicion lateral del boton de configuracion
+     */
+    private int posLatConfi_r;
+    /**
+     * icono para configuración
+     */
+    private String personaje;
+    /**
+     * Rectangulo de pulsación para configuración
+     */
+    private Rect perso;
+    /**
+     * Posicion configuracion
+     */
+    private Point posPerso;
+    /**
+     * posicion lateral del boton de configuracion
+     */
+    private int posLatPerso_l;
+    /**
+     * posicion lateral del boton de configuracion
+     */
+    private int posLatPerso_r;
 
     /***
      * Constructor de la clase
@@ -143,12 +189,13 @@ public class Principal extends Escenas {
      * @param context contexto de la aplicación
      * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
      * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
+     * @param info Instancia de la clase Info
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public Principal(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
-        super(numEscena, context, anchoPantalla, altoPantalla);
+    public Principal(int numEscena, Context context, int anchoPantalla, int altoPantalla, Info info) {
+        super(numEscena, context, anchoPantalla, altoPantalla,info);
         int size = getPixels(50);
-        posBx = posBf = poxBy = altoPantalla / 2 - getPixels(50);
+        posBx = posBf = poxBy = altoPantalla / 2 - getPixels(75);
         posBx = anchoPantalla / 2 - getPixels(25);
         posBf = anchoPantalla / 2 + getPixels(25);
         inicializarRects();
@@ -164,15 +211,21 @@ public class Principal extends Escenas {
         titulo = context.getResources().getString(R.string.app_name);
         jugar = context.getResources().getString(R.string.play);
         creditos = context.getResources().getString(R.string.creditos);
-        //ayuda = context.getResources().getString(R.string.help);
+        ayuda = context.getResources().getString(R.string.help);
         exit = context.getResources().getString(R.string.salir);
+        configuracion = context.getResources().getString(R.string.configuracion);
+        personaje = context.getResources().getString(R.string.character);
         play = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
-        poxBy += getPixels(50) * 2;
+        poxBy += getPixels(40) * 2;
         cre = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
-        poxBy += getPixels(50) * 2;
-
-
-        //help = new Rect(posBx,poxBy,posBf,poxBy+getPixels(50));
+        poxBy += getPixels(40) * 2;
+        help = new Rect(posBx,poxBy,posBf,poxBy+getPixels(50));
+        posLatConfi_l = posBx - getPixels(100) * 2;
+        posLatConfi_r = posBf - getPixels(100) * 2;
+        confi = new Rect(posLatConfi_l,poxBy,posLatConfi_r,poxBy+getPixels(50));
+        posLatPerso_l = posBx + getPixels(100) * 2;
+        posLatPerso_r = posBf + getPixels(100) * 2;
+        perso = new Rect(posLatPerso_l,poxBy,posLatPerso_r,poxBy+getPixels(50));
         salir = new Rect(0, 0, getPixels(50), getPixels(50));
         parar = new Rect(0, 0, anchoPantalla, altoPantalla);
         yes = new Rect(anchoPantalla / 2 - getPixels(100), altoPantalla / 2, anchoPantalla / 2 - getPixels(25), altoPantalla / 2 + getPixels(50));
@@ -195,9 +248,12 @@ public class Principal extends Escenas {
         s.setTextSize(getPixels(30));
         s.setTypeface(letras);
 
-        posTitulo = new Point(anchoPantalla / 2 - getPixels(75), getPixels(80));
+        posTitulo = new Point(anchoPantalla / 2 - getPixels(75), getPixels(75));
         posJugar = new Point(play.left + getPixels(3), play.bottom - getPixels(8));
         posCreditos = new Point(cre.left, cre.bottom - getPixels(8));
+        posAyuda = new Point(help.left, help.bottom - getPixels(8));
+        posConfi = new Point(confi.left, confi.bottom - getPixels(8));
+        posPerso = new Point(perso.left, perso.bottom - getPixels(8));
         posSalir = new Point(salir.left + getPixels(5), salir.bottom - getPixels(8));
         posPregunta = new Point(anchoPantalla / 3, getPixels(100));
         posSi = new Point(yes.left + yes.width() / 3, yes.bottom - getPixels(10));
@@ -216,10 +272,14 @@ public class Principal extends Escenas {
             c.drawRect(play, pBoton);
             c.drawRect(cre, pBoton);
             c.drawRect(salir, pBoton);
-            //c.drawRect(help, pBoton);
+            c.drawRect(help, pBoton);
+            c.drawRect(confi, pBoton);
+            c.drawRect(perso, pBoton);
             c.drawText(jugar, posJugar.x, posJugar.y, p);
             c.drawText(creditos, posCreditos.x, posCreditos.y, p);
-            //c.drawText(ayuda, help.centerX() - help.width() / 2, help.centerY() + help.height() / 2, p);
+            c.drawText(ayuda, posAyuda.x, posAyuda.y, p);
+            c.drawText(configuracion, posConfi.x, posConfi.y, p);
+            c.drawText(personaje, posPerso.x, posPerso.y, p);
             c.drawText(exit, posSalir.x, posSalir.y, p);
         } else {
             c.drawRect(parar, start);
@@ -254,8 +314,12 @@ public class Principal extends Escenas {
                         return 2;
                     } else if (cre.contains(x, y)) {
                         return 3;
-                        /*} else if (help.contains((int) event.getX(), (int) event.getY())) {
-                                  return 6;*/
+                    }else if(confi.contains((int) event.getX(), (int) event.getY())) {
+                        return 4;
+                    }else if (help.contains((int) event.getX(), (int) event.getY())) {
+                        return 5;
+                    }else if (perso.contains((int) event.getX(), (int) event.getY())) {
+                        return 6;
                     } else if (salir.contains(x, y)) {
                         saliendo = true;
                     }

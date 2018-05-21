@@ -5,6 +5,7 @@ package com.example.tokisaki.sakiku;
  */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -114,6 +115,10 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      * booleano que indica si se esta jugando
      */
     static boolean jugando = false;
+    /**
+     * instancia de la clase info
+     */
+    private Info info;
 
 
     /***
@@ -127,6 +132,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         this.surfaceHolder.addCallback(this);
         hilo = new Hilo();
         setFocusable(true);
+        info = new Info();
         creoMusica();
 
     }
@@ -148,6 +154,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      * @param event Tipo de pulsación
      * @return numero de la escena actual
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         nuevaEscena = escenaActual.onTouchEvent(event);
@@ -162,6 +169,15 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                     break;
                 case 3:
                     eleccionEscena(3);
+                    break;
+                case 4:
+                    eleccionEscena(4);
+                    break;
+                case 5:
+                    eleccionEscena(5);
+                    break;
+                case 6:
+                    eleccionEscena(6);
                     break;
             }
             audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
@@ -189,8 +205,10 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      */
     protected void vuelta() {
         funcionando = true;
-        if(jugando)musicaJuego.start();
-        else mediaPlayer.start();
+        if (info.musica) {
+            if (jugando) musicaJuego.start();
+            else mediaPlayer.start();
+        }
         hilo = new Hilo();
         hilo.start();
     }
@@ -205,15 +223,27 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         switch (escena) {
             case 1:
                 jugando = false;
-                escenaActual = new Principal(1, context, anchoPantalla, altoPantalla);
+                escenaActual = new Principal(1, context, anchoPantalla, altoPantalla,info);
                 break;
             case 2:
                 jugando = true;
-                escenaActual = new Jugar(2, context, anchoPantalla, altoPantalla);
+                escenaActual = new Jugar(2, context, anchoPantalla, altoPantalla,info);
                 break;
             case 3:
                 jugando = false;
-                escenaActual = new Creditos(3, context, anchoPantalla, altoPantalla);
+                escenaActual = new Creditos(3, context, anchoPantalla, altoPantalla,info);
+                break;
+            case 4:
+                jugando=false;
+                escenaActual = new Configuracion(4, context, anchoPantalla, altoPantalla,info);
+                break;
+            case 5:
+                jugando=false;
+                escenaActual = new Ayuda(5, context, anchoPantalla, altoPantalla,info);
+                break;
+            case 6:
+                jugando=false;
+                escenaActual = new EleccionPersonaje(6, context, anchoPantalla, altoPantalla,info);
                 break;
         }
     }
@@ -240,6 +270,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         anchoPantalla = i1;
         altoPantalla = i2;
+        cargarDatos();
         eleccionEscena(1);
         if (!funcionando) {
             funcionando = true;
@@ -253,6 +284,36 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /***
+     * función que carga los datos guardados en preferencias
+     */
+    private void cargarDatos() {
+        SharedPreferences preferencias = context.getSharedPreferences("saves", 0);
+        info.efectos = preferencias.getBoolean("efectos", true);
+        info.musica = preferencias.getBoolean("musica", true);
+        info.vibrar = preferencias.getBoolean("vibrar", true);
+        info.personaje = preferencias.getString("character","aventurero");
+        info.ipServidor = preferencias.getString("ip","192.168.0.10");
+
+    }
+
+    /***
+     * función que guarda datos en preferencias
+     */
+    private void guardarPreferencias() {
+        try {
+            SharedPreferences preferencias = context.getSharedPreferences("saves", 0);
+            SharedPreferences.Editor editor = preferencias.edit();
+            editor.putBoolean("efectos", info.efectos);
+            editor.putBoolean("musica", info.musica);
+            editor.putBoolean("vibrar", info.vibrar);
+            editor.putString("character",info.personaje);
+            editor.putString("ip",info.ipServidor);
+            editor.apply();
+        }catch (Exception e){
+
+        }
+    }
 
     /***
      * Función que se llama cuando se destruye la surface
@@ -261,6 +322,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         funcionando = false;
+        guardarPreferencias();
         try {
             hilo.join();
         } catch (InterruptedException e) {

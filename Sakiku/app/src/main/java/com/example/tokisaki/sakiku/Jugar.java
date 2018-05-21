@@ -22,9 +22,16 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -116,6 +123,22 @@ public class Jugar extends Escenas {
      * Boton de disparo dos
      */
     private ImageButton btnDisparoDos;
+    /**
+     * indica si se esta conectado o no al servidor
+     */
+    protected boolean conectado;
+    /**
+     * indica si se esta en la clase juego
+     */
+    protected boolean jugar;
+    /**
+     * hilo que se va a conectar con el servidor
+     */
+    protected Cliente myATaskYW;
+    /**
+     * booleano que indicara si se ha podido encortrar el servidor
+     */
+    boolean noEncuentra;
 
     /***
      * Constructor de la clase
@@ -123,10 +146,14 @@ public class Jugar extends Escenas {
      * @param context contexto de la aplicación
      * @param anchoPantalla ancho de la pantalla del dispositivo donde se ejecita la aplicación
      * @param altoPantalla alto de la pantalla del dispositivo donde se ejecita la aplicación
+     * @param info Instancia de la clase Info
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public Jugar(int numEscena, Context context, int anchoPantalla, int altoPantalla) {
-        super(numEscena, context, anchoPantalla, altoPantalla);
+    public Jugar(int numEscena, Context context, int anchoPantalla, int altoPantalla,Info info) {
+        super(numEscena, context, anchoPantalla, altoPantalla,info);
+        conectado = false;
+        jugar = true;
+        noEncuentra = false;
         inicializar();
         Inicio.mediaPlayer.stop();
         Inicio.musicaJuego.start();
@@ -134,14 +161,14 @@ public class Jugar extends Escenas {
         parallax = new Parallax(context, anchoPantalla, altoPantalla);
         tiempoMove = System.currentTimeMillis();
         segundo = System.currentTimeMillis() + 1000;
-        contador = 60;
+        contador = 10;
         finCarrera = false;
         obstaculos = new ArrayList<>();
         pasear = 0;
-        Cliente myATaskYW = new Cliente(context,this);
-        myATaskYW.execute("libro");
+        myATaskYW = new Cliente(context,this,info);
+        myATaskYW.execute("conectado");
         //comenzo = true;
-        //v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     /***
@@ -174,35 +201,40 @@ public class Jugar extends Escenas {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-        if (contador <= 0) {
-            finCarrera = true;
-        }
-        if (!finCarrera) {
-            if (corredor.ganador(anchoPantalla)) {
+        if(conectado) {
+            if (contador <= 0) {
                 finCarrera = true;
-            } else {
-                parallax.actualizarFisica();
-                //corredor.movimiento(true);
-                if (System.currentTimeMillis() > segundo) {
-                    contador--;
-                    segundo = System.currentTimeMillis() + 1000;
-                }
-                if (System.currentTimeMillis() - tiempoMove > tickMove) {
-                    corredor.actualizarFisica();
-                    tiempoMove = System.currentTimeMillis();
-                    pasear++;
-                    if (pasear % 4 == 0) efectos.play(pasos, v, v, 1, 0, 1);
-                }
-                for (Obstaculos obs : obstaculos) {
-                    if (obs.actualizarFisica()) {
-                        obstaculos.remove(obs);
-                        break;
+            }
+            if (!finCarrera) {
+                if (corredor.ganador(anchoPantalla)) {
+                    finCarrera = true;
+                } else {
+                    parallax.actualizarFisica();
+                    //corredor.movimiento(true);
+                    if (System.currentTimeMillis() > segundo) {
+                        contador--;
+                        segundo = System.currentTimeMillis() + 1000;
                     }
-                    if (obs.detectarColision(corredor)) {
-                        obstaculos.remove(obs);
-                        corredor.movimiento(false);
-                        corredor.setRectangulos();
-                        efectos.play(golpe, v, v, 1, 0, 1);
+                    if (System.currentTimeMillis() - tiempoMove > tickMove) {
+                        corredor.actualizarFisica();
+                        tiempoMove = System.currentTimeMillis();
+                        pasear++;
+                        if (pasear % 4 == 0) efectos.play(pasos, v, v, 1, 0, 1);
+                    }
+                    for (Obstaculos obs : obstaculos) {
+                        if (obs.actualizarFisica()) {
+                            obstaculos.remove(obs);
+                            break;
+                        }
+                        if (obs.detectarColision(corredor)) {
+                            obstaculos.remove(obs);
+                            corredor.movimiento(false);
+                            corredor.setRectangulos();
+                            efectos.play(golpe, v, v, 1, 0, 1);
+                            Vibrator mVibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+                            mVibrator.vibrate(300);
+
+                        }
                     }
                 }
             }
@@ -215,21 +247,31 @@ public class Jugar extends Escenas {
      */
     public void dibujar(Canvas canvas) {
         try {
-            if (!finCarrera) {
-                canvas.drawColor(Color.BLUE);
-                parallax.dibujar(canvas);
-                canvas.drawText("" + contador, posContador.x, posContador.y, l);
-                btnDisparo.dibujar(canvas);
-                btnDisparoDos.dibujar(canvas);
-                corredor.dibujar(canvas);
-                for (Obstaculos obs : obstaculos) {
-                    obs.dibujar(canvas);
+            if(conectado) {
+                if (!finCarrera) {
+                    canvas.drawColor(Color.BLUE);
+                    parallax.dibujar(canvas);
+                    canvas.drawText("" + contador, posContador.x, posContador.y, l);
+                    btnDisparo.dibujar(canvas);
+                    btnDisparoDos.dibujar(canvas);
+                    corredor.dibujar(canvas);
+                    for (Obstaculos obs : obstaculos) {
+                        obs.dibujar(canvas);
+                    }
+                    btnDesliz.dibujar(canvas);
+                    btnSalto.dibujar(canvas);
+                } else {
+                    canvas.drawColor(Color.BLACK);
+                    canvas.drawText(fin, posTextoFin.x, posTextoFin.y, l);
                 }
-                btnDesliz.dibujar(canvas);
-                btnSalto.dibujar(canvas);
-            } else {
-                canvas.drawColor(Color.BLACK);
-                canvas.drawText(fin, posTextoFin.x, posTextoFin.y, l);
+            }else{
+                if(noEncuentra){
+                    canvas.drawColor(Color.BLACK);
+                    canvas.drawText("no se ha podido encontrar el servido vuelva a intentarlo", posTextoFin.x, posTextoFin.y, l);
+                }else {
+                    canvas.drawColor(Color.BLACK);
+                    canvas.drawText("no estas conectado al servidor", posTextoFin.x, posTextoFin.y, l);
+                }
             }
         } catch (Exception e) {
         }
@@ -246,21 +288,31 @@ public class Jugar extends Escenas {
         int x = (int) event.getX(), y = (int) event.getY();
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
-                if (!finCarrera) {
-                    if (btnDesliz.rButton.contains(x, y)) {
-                        corredor.setEstado(eEstadoPersonaje.DESLIZANDOSE);
-                        efectos.play(sonidoDesliz,v,v,1,0,1 );
-                    } else if (btnSalto.rButton.contains(x, y)) {
-                        corredor.setEstado(eEstadoPersonaje.SALTANDO);
-                        efectos.play(sonidoSalto,v,v,1,0,1 );
-                    } else if (btnDisparo.rButton.contains(x, y)) {
-                        obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
-                    } else if (btnDisparoDos.rButton.contains(x, y)) {
-                        obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
+                if(conectado) {
+                    if (!finCarrera) {
+                        if (btnDesliz.rButton.contains(x, y)) {
+                            corredor.setEstado(eEstadoPersonaje.DESLIZANDOSE);
+                            efectos.play(sonidoDesliz, v, v, 1, 0, 1);
+                        } else if (btnSalto.rButton.contains(x, y)) {
+                            corredor.setEstado(eEstadoPersonaje.SALTANDO);
+                            efectos.play(sonidoSalto, v, v, 1, 0, 1);
+                        } else if (btnDisparo.rButton.contains(x, y)) {
+                            obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
+                        } else if (btnDisparoDos.rButton.contains(x, y)) {
+                            obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
+                        }
+                    } else {
+                        Inicio.musicaJuego.stop();
+                        Inicio.mediaPlayer.start();
+                        jugar = false;
+                        myATaskYW.cancel(true);
+                        return 1;
                     }
-                } else {
+                }else {
                     Inicio.musicaJuego.stop();
                     Inicio.mediaPlayer.start();
+                    jugar = false;
+                    myATaskYW.cancel(true);
                     return 1;
                 }
                 break;
