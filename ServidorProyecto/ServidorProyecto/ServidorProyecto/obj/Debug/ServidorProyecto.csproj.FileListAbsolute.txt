@@ -1,0 +1,7 @@
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\bin\Debug\ServidorProyecto.exe.config
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\bin\Debug\ServidorProyecto.exe
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\bin\Debug\ServidorProyecto.pdb
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\obj\Debug\ServidorProyecto.csprojResolveAssemblyReference.cache
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\obj\Debug\ServidorProyecto.csproj.CoreCompileInputs.cache
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\obj\Debug\ServidorProyecto.exe
+C:\Users\Tokisaki\source\repos\ServidorProyecto\ServidorProyecto\obj\Debug\ServidorProyecto.pdb

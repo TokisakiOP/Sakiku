@@ -18,17 +18,14 @@ public class Parallax {
      * Velocidad de movimiento del fondo
      */
     private int velocidadFondo;
-
     /**
      * Imagen del fondo en movimiento
      */
     private Bitmap fondo;
-
     /**
      * Posicion X de la primera copia del fondo
      */
     private int postI1;
-
     /**
      * Posicion X de la segunda copia del fondo
      */
@@ -36,8 +33,7 @@ public class Parallax {
 
     /**
      * Constructor de la clase
-     *
-     * @param context       Contexto de la aplicacion
+     * @param context Contexto de la aplicacion
      * @param anchoPantalla ancho de la pantalla
      * @param altoPantalla  alto de la pantalla
      */

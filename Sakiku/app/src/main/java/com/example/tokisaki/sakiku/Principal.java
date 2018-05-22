@@ -5,17 +5,13 @@ package com.example.tokisaki.sakiku;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import static com.example.tokisaki.sakiku.Inicio.jugando;
@@ -81,7 +77,6 @@ public class Principal extends Escenas {
      * rectangulo e colision para el icono de salir
      */
     private Rect salir;
-
     /**
      * rectangulo que se dibuja sobre toda la pantalla al pulsar el botón de salir
      */
@@ -182,6 +177,27 @@ public class Principal extends Escenas {
      * posicion lateral del boton de configuracion
      */
     private int posLatPerso_r;
+    /**
+     * icono para records
+     */
+    private String records;
+    /**
+     * Rectangulo de pulsación para records
+     */
+    private Rect reco;
+    /**
+     * Posicion records
+     */
+    private Point posReco;
+    /**
+     * posicion lateral del boton de records
+     */
+    private int posLatReco_l;
+    /**
+     * posicion lateral del boton de records
+     */
+    private int posLatReco_r;
+
 
     /***
      * Constructor de la clase
@@ -199,8 +215,10 @@ public class Principal extends Escenas {
         posBx = anchoPantalla / 2 - getPixels(25);
         posBf = anchoPantalla / 2 + getPixels(25);
         inicializarRects();
-        if(jugando)Inicio.musicaJuego.stop();
-        Inicio.mediaPlayer.start();
+        if(info.musica) {
+            if (jugando) Inicio.musicaJuego.stop();
+            Inicio.mediaPlayer.start();
+        }
 
     }
 
@@ -215,7 +233,11 @@ public class Principal extends Escenas {
         exit = context.getResources().getString(R.string.salir);
         configuracion = context.getResources().getString(R.string.configuracion);
         personaje = context.getResources().getString(R.string.character);
+        records = context.getResources().getString(R.string.records);
         play = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
+        posLatReco_l = posBx + getPixels(100) * 2;
+        posLatReco_r = posBf + getPixels(100) * 2;
+        reco = new Rect(posLatReco_l,poxBy,posLatReco_r,poxBy+getPixels(50));
         poxBy += getPixels(40) * 2;
         cre = new Rect(posBx, poxBy, posBf, poxBy + getPixels(50));
         poxBy += getPixels(40) * 2;
@@ -254,6 +276,7 @@ public class Principal extends Escenas {
         posAyuda = new Point(help.left, help.bottom - getPixels(8));
         posConfi = new Point(confi.left, confi.bottom - getPixels(8));
         posPerso = new Point(perso.left, perso.bottom - getPixels(8));
+        posReco = new Point(reco.left, reco.bottom - getPixels(8));
         posSalir = new Point(salir.left + getPixels(5), salir.bottom - getPixels(8));
         posPregunta = new Point(anchoPantalla / 3, getPixels(100));
         posSi = new Point(yes.left + yes.width() / 3, yes.bottom - getPixels(10));
@@ -269,17 +292,12 @@ public class Principal extends Escenas {
         if (!saliendo) {
             c.drawBitmap(fondo, 0, 0, null);
             c.drawText(titulo, posTitulo.x, posTitulo.y, l);
-            c.drawRect(play, pBoton);
-            c.drawRect(cre, pBoton);
-            c.drawRect(salir, pBoton);
-            c.drawRect(help, pBoton);
-            c.drawRect(confi, pBoton);
-            c.drawRect(perso, pBoton);
             c.drawText(jugar, posJugar.x, posJugar.y, p);
             c.drawText(creditos, posCreditos.x, posCreditos.y, p);
             c.drawText(ayuda, posAyuda.x, posAyuda.y, p);
             c.drawText(configuracion, posConfi.x, posConfi.y, p);
             c.drawText(personaje, posPerso.x, posPerso.y, p);
+            c.drawText(records, posReco.x, posReco.y, p);
             c.drawText(exit, posSalir.x, posSalir.y, p);
         } else {
             c.drawRect(parar, start);
@@ -320,6 +338,8 @@ public class Principal extends Escenas {
                         return 5;
                     }else if (perso.contains((int) event.getX(), (int) event.getY())) {
                         return 6;
+                    }else if (reco.contains((int) event.getX(), (int) event.getY())) {
+                        return 7;
                     } else if (salir.contains(x, y)) {
                         saliendo = true;
                     }

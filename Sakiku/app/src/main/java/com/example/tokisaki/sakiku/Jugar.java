@@ -5,34 +5,22 @@ package com.example.tokisaki.sakiku;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.Socket;
-import java.net.SocketException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
@@ -53,32 +41,31 @@ public class Jugar extends Escenas {
      * lista con los obstaculos que hay en pantalla
      */
     protected ArrayList<Obstaculos> obstaculos;
-
-    private int tickDisparoFrame = 40; // tiempo de refresco de pantalla para los frames del disparo del personaje
-    private int puntuacion = 0; // puntuación conseguida
-
+    /**
+     * puntuación conseguida
+     */
+    private int puntuacion;
     /**
      * tiempo de refresco de pantalla para el movimento sobre el eje X del personaje
      */
     private int tickMove = 30;
-    private int v; // volumen de la música
-    private int pasear; // numero que calcula cada cuantos frames suena el sonido de las pisadas
+    /**
+     * tiempo de refresco de pantalla para el movimento sobre el eje X del personaje
+     */
+    private int tickAccion = 100;
+    /**
+     * volumen de la música
+     */
+    private int v;
+    /**
+     * numero que calcula cada cuantos frames suena el sonido de las pisadas
+     */
+    private int pasear;
     /**
      * String que se muestra una vez que acaba la carrera
      */
     private String fin;
-    /**
-     * Instancia de la clase obstaculos
-     */
-    private Obstaculos obs;
-    /**
-     * booleana que indica si el personaje esta saltando
-     */
-    private boolean salto;
-    /**
-     * booleana que indica si el personaje se esta deslizando
-     */
-    private boolean desliz;
+
     /**
      * booleana que indica si se ha finalizado la carrera
      */
@@ -96,10 +83,6 @@ public class Jugar extends Escenas {
      */
     private Point posContador;
     /**
-     * Posicion del boton de disparo
-     */
-    private Point posDisparo;
-    /**
      * Posicion del texto fin
      */
     private Point posTextoFin;
@@ -116,14 +99,6 @@ public class Jugar extends Escenas {
      */
     private ImageButton btnDesliz;
     /**
-     * Boton de disparo
-     */
-    private ImageButton btnDisparo;
-    /**
-     * Boton de disparo dos
-     */
-    private ImageButton btnDisparoDos;
-    /**
      * indica si se esta conectado o no al servidor
      */
     protected boolean conectado;
@@ -139,6 +114,26 @@ public class Jugar extends Escenas {
      * booleano que indicara si se ha podido encortrar el servidor
      */
     boolean noEncuentra;
+    /**
+     * booleana que indica si se ha batido un record
+     */
+    private boolean record;
+    /**
+     * parametro que ordena de manera inversa una lista
+     */
+    private Comparator<Integer> comparador = Collections.reverseOrder();
+    /**
+     * Variable que recogerá "noserver" de strings.xml
+     */
+    private String noServer;
+    /**
+     * Variable que recogerá "conectando" de strings.xml
+     */
+    private String conectando;
+    /**
+     * Variable que recogerá "primera vez" de strings.xml
+     */
+    private String primeraVez;
 
     /***
      * Constructor de la clase
@@ -154,20 +149,23 @@ public class Jugar extends Escenas {
         conectado = false;
         jugar = true;
         noEncuentra = false;
+        record = false;
+        puntuacion = 3000;
         inicializar();
-        Inicio.mediaPlayer.stop();
-        Inicio.musicaJuego.start();
-        corredor = new Personaje(context, altoPantalla, anchoPantalla);
+        if(info.musica) {
+            Inicio.mediaPlayer.stop();
+            Inicio.musicaJuego.start();
+        }
+        corredor = new Personaje(context, altoPantalla, anchoPantalla,info);
         parallax = new Parallax(context, anchoPantalla, altoPantalla);
         tiempoMove = System.currentTimeMillis();
         segundo = System.currentTimeMillis() + 1000;
-        contador = 10;
+        contador = 30;
         finCarrera = false;
         obstaculos = new ArrayList<>();
         pasear = 0;
         myATaskYW = new Cliente(context,this,info);
         myATaskYW.execute("conectado");
-        //comenzo = true;
         v= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
@@ -184,11 +182,9 @@ public class Jugar extends Escenas {
         l.setColor(Color.RED);
         l.setTextSize(getPixels(30));
         l.setTypeface(letras);
-
-        btnDisparo = new ImageButton(escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.senal), getPixels(80)),
-                new Point(anchoPantalla - escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.senal), getPixels(80)).getWidth(), 0));
-        btnDisparoDos = new ImageButton(escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.lunafinal), getPixels(80)),
-                new Point(anchoPantalla - btnDisparo.imagen.getHeight(), escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.lunafinal), getPixels(80)).getHeight()));
+        noServer = context.getResources().getString(R.string.noserver);
+        conectando = context.getResources().getString(R.string.conectando);
+        primeraVez = context.getResources().getString(R.string.primeravez);
         btnDesliz = new ImageButton(escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.deslizarse), getPixels(80)),
                 new Point(0, altoPantalla - escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.deslizarse), getPixels(80)).getHeight()));
         btnSalto = new ImageButton(escalaAnchura(BitmapFactory.decodeResource(context.getResources(), R.drawable.saltar), getPixels(80)),
@@ -204,22 +200,36 @@ public class Jugar extends Escenas {
         if(conectado) {
             if (contador <= 0) {
                 finCarrera = true;
+                if(!record){
+                    info.records.add(puntuacion);
+                    Collections.sort(info.records,comparador);
+                    record = true;
+                }
             }
             if (!finCarrera) {
                 if (corredor.ganador(anchoPantalla)) {
                     finCarrera = true;
                 } else {
                     parallax.actualizarFisica();
-                    //corredor.movimiento(true);
                     if (System.currentTimeMillis() > segundo) {
                         contador--;
                         segundo = System.currentTimeMillis() + 1000;
                     }
-                    if (System.currentTimeMillis() - tiempoMove > tickMove) {
+                    if (System.currentTimeMillis() - tiempoMove > tickMove && corredor.estado == eEstadoPersonaje.CORRIENDO) {
                         corredor.actualizarFisica();
                         tiempoMove = System.currentTimeMillis();
+                        corredor.movimiento(true,false);
                         pasear++;
-                        if (pasear % 4 == 0) efectos.play(pasos, v, v, 1, 0, 1);
+                        if (pasear % 4 == 0){
+                            if(info.efectos) efectos.play(pasos, v, v, 1, 0, 1);
+                        }
+                    }else if (System.currentTimeMillis() - tiempoMove > tickAccion && (corredor.estado == eEstadoPersonaje.DESLIZANDOSE
+                            || corredor.estado == eEstadoPersonaje.SALTANDO)){
+                        if(corredor.estado == eEstadoPersonaje.SALTANDO){
+                            corredor.movimiento(true,true);
+                        }
+                        corredor.actualizarFisica();
+                        tiempoMove = System.currentTimeMillis();
                     }
                     for (Obstaculos obs : obstaculos) {
                         if (obs.actualizarFisica()) {
@@ -228,11 +238,14 @@ public class Jugar extends Escenas {
                         }
                         if (obs.detectarColision(corredor)) {
                             obstaculos.remove(obs);
-                            corredor.movimiento(false);
+                            corredor.movimiento(false,false);
                             corredor.setRectangulos();
-                            efectos.play(golpe, v, v, 1, 0, 1);
-                            Vibrator mVibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
-                            mVibrator.vibrate(300);
+                            if(info.efectos)efectos.play(golpe, v, v, 1, 0, 1);
+                            if(info.vibrar) {
+                                Vibrator mVibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+                                mVibrator.vibrate(300);
+                            }
+                            puntuacion -= 100;
 
                         }
                     }
@@ -252,9 +265,8 @@ public class Jugar extends Escenas {
                     canvas.drawColor(Color.BLUE);
                     parallax.dibujar(canvas);
                     canvas.drawText("" + contador, posContador.x, posContador.y, l);
-                    btnDisparo.dibujar(canvas);
-                    btnDisparoDos.dibujar(canvas);
                     corredor.dibujar(canvas);
+                    canvas.drawText(""+puntuacion, anchoPantalla - getPixels(100),0 + getPixels(30), l);
                     for (Obstaculos obs : obstaculos) {
                         obs.dibujar(canvas);
                     }
@@ -267,10 +279,11 @@ public class Jugar extends Escenas {
             }else{
                 if(noEncuentra){
                     canvas.drawColor(Color.BLACK);
-                    canvas.drawText("no se ha podido encontrar el servido vuelva a intentarlo", posTextoFin.x, posTextoFin.y, l);
+                    canvas.drawText(noServer, posTextoFin.x, posTextoFin.y, l);
                 }else {
                     canvas.drawColor(Color.BLACK);
-                    canvas.drawText("no estas conectado al servidor", posTextoFin.x, posTextoFin.y, l);
+                    canvas.drawText(conectando, 0 +getPixels(30), posTextoFin.y - getPixels(20), l);
+                    canvas.drawText(primeraVez, 0 +getPixels(30), posTextoFin.y + getPixels(20), l);
                 }
             }
         } catch (Exception e) {
@@ -292,25 +305,25 @@ public class Jugar extends Escenas {
                     if (!finCarrera) {
                         if (btnDesliz.rButton.contains(x, y)) {
                             corredor.setEstado(eEstadoPersonaje.DESLIZANDOSE);
-                            efectos.play(sonidoDesliz, v, v, 1, 0, 1);
+                            if(info.efectos)efectos.play(sonidoDesliz, v, v, 1, 0, 1);
                         } else if (btnSalto.rButton.contains(x, y)) {
                             corredor.setEstado(eEstadoPersonaje.SALTANDO);
-                            efectos.play(sonidoSalto, v, v, 1, 0, 1);
-                        } else if (btnDisparo.rButton.contains(x, y)) {
-                            obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
-                        } else if (btnDisparoDos.rButton.contains(x, y)) {
-                            obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
+                            if(info.efectos)efectos.play(sonidoSalto, v, v, 1, 0, 1);
                         }
                     } else {
-                        Inicio.musicaJuego.stop();
-                        Inicio.mediaPlayer.start();
+                        if(info.musica) {
+                            Inicio.musicaJuego.stop();
+                            Inicio.mediaPlayer.start();
+                        }
                         jugar = false;
                         myATaskYW.cancel(true);
                         return 1;
                     }
                 }else {
-                    Inicio.musicaJuego.stop();
-                    Inicio.mediaPlayer.start();
+                    if(info.musica) {
+                        Inicio.musicaJuego.stop();
+                        Inicio.mediaPlayer.start();
+                    }
                     jugar = false;
                     myATaskYW.cancel(true);
                     return 1;
@@ -329,10 +342,10 @@ public class Jugar extends Escenas {
     protected void crearObstaculos(String obstaculo){
         if(obstaculo.equals("bloque")){
             obstaculos.add((new Obstaculo2(context, new PointF(anchoPantalla, altoPantalla - getPixels(40)))));
-            efectos.play(sonidoHielo,v,v,1,0,1 );
+            if(info.efectos)efectos.play(sonidoHielo,v,v,1,0,1 );
         }else if(obstaculo.equals("bola")){
             obstaculos.add(new Obstaculo1(context, new PointF(anchoPantalla, altoPantalla - corredor.alturaPersonaje - getPixels(20))));
-            efectos.play(sonidoFuego,v,v,1,0,1 );
+            if(info.efectos)efectos.play(sonidoFuego,v,v,1,0,1 );
         }
     }
 

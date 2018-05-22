@@ -158,7 +158,6 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         nuevaEscena = escenaActual.onTouchEvent(event);
-        mediaPlayer.pause();
         if (nuevaEscena != escenaActual.getNumEscena()) {
             switch (nuevaEscena) {
                 case 1:
@@ -179,8 +178,11 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                 case 6:
                     eleccionEscena(6);
                     break;
+                case 7:
+                    eleccionEscena(7);
+                    break;
             }
-            audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
+            if(info.efectos)audioManager.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
         }
         return true;
     }
@@ -190,8 +192,9 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      */
     protected void enPausa() {
         funcionando = false;
-        if(jugando)musicaJuego.pause();
-        else mediaPlayer.pause();
+            if (jugando) musicaJuego.pause();
+            else mediaPlayer.pause();
+
         try {
             hilo.join();
         } catch (InterruptedException e) {
@@ -205,9 +208,11 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
      */
     protected void vuelta() {
         funcionando = true;
-        if (info.musica) {
-            if (jugando) musicaJuego.start();
-            else mediaPlayer.start();
+        if(info.musica) {
+            if (info.musica) {
+                if (jugando) musicaJuego.start();
+                else mediaPlayer.start();
+            }
         }
         hilo = new Hilo();
         hilo.start();
@@ -224,6 +229,7 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
             case 1:
                 jugando = false;
                 escenaActual = new Principal(1, context, anchoPantalla, altoPantalla,info);
+                if (info.musica)mediaPlayer.start();
                 break;
             case 2:
                 jugando = true;
@@ -232,18 +238,27 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
             case 3:
                 jugando = false;
                 escenaActual = new Creditos(3, context, anchoPantalla, altoPantalla,info);
+                if (info.musica)mediaPlayer.start();
                 break;
             case 4:
                 jugando=false;
                 escenaActual = new Configuracion(4, context, anchoPantalla, altoPantalla,info);
+                if (info.musica)mediaPlayer.start();
                 break;
             case 5:
                 jugando=false;
                 escenaActual = new Ayuda(5, context, anchoPantalla, altoPantalla,info);
+                if (info.musica)mediaPlayer.start();
                 break;
             case 6:
                 jugando=false;
                 escenaActual = new EleccionPersonaje(6, context, anchoPantalla, altoPantalla,info);
+                if (info.musica)mediaPlayer.start();
+                break;
+            case 7:
+                jugando=false;
+                escenaActual = new Records(7, context, anchoPantalla, altoPantalla,info);
+                if (info.musica)mediaPlayer.start();
                 break;
         }
     }
@@ -280,7 +295,9 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
                 hilo = new Hilo();
                 hilo.start();
             }
-            mediaPlayer.start();
+            if(info.musica) {
+                mediaPlayer.start();
+            }
         }
     }
 
@@ -294,6 +311,11 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
         info.vibrar = preferencias.getBoolean("vibrar", true);
         info.personaje = preferencias.getString("character","aventurero");
         info.ipServidor = preferencias.getString("ip","192.168.0.10");
+        if(info.records != null) {
+            info.records.add(preferencias.getInt("records1", 0));
+            info.records.add(preferencias.getInt("records2", 0));
+            info.records.add(preferencias.getInt("records3", 0));
+        }
 
     }
 
@@ -309,6 +331,9 @@ public class Inicio extends SurfaceView implements SurfaceHolder.Callback {
             editor.putBoolean("vibrar", info.vibrar);
             editor.putString("character",info.personaje);
             editor.putString("ip",info.ipServidor);
+            editor.putInt("records1", info.records.get(0));
+            editor.putInt("records2", info.records.get(1));
+            editor.putInt("records3", info.records.get(2));
             editor.apply();
         }catch (Exception e){
 

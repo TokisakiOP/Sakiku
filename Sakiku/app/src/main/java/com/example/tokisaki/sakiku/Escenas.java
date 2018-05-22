@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -18,7 +17,6 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
@@ -162,6 +160,7 @@ public class Escenas {
     /***
      * Inicializa la musica y los efectos que su usaran en el juego
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void inicializarMusica() {
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if ((android.os.Build.VERSION.SDK_INT) >= 21) {

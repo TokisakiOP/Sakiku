@@ -5,6 +5,8 @@ package com.example.tokisaki.sakiku;
  */
 
 
+import java.util.ArrayList;
+
 /***
  * Clase contenedora de los datos que se guardaran y cargaran en el juego
  */
@@ -30,5 +32,9 @@ public class Info {
      * String que la ip del servidor
      */
     static String ipServidor;
+    /**
+     * lista que va a contener las 3 mejores puntuaciones dadas en el juego
+     */
+    static ArrayList<Integer> records = new ArrayList<>();
 
 }

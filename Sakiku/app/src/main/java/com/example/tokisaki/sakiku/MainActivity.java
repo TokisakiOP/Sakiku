@@ -1,5 +1,7 @@
 package com.example.tokisaki.sakiku;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -45,16 +47,20 @@ public class MainActivity extends AppCompatActivity {
         pantalla.vuelta();
     }
 
-    /*@Override
+    /**
+     * funcion que se llama al pulsar el boton de retroceso de tu dispositivo
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
     public void onBackPressed() {
         if (pantalla.escenaActual.getNumEscena() == 2){
-            Jugar.pause =true;
+
         }else if(pantalla.escenaActual.getNumEscena() == 1){
             Principal.saliendo = true;
         }else{
             pantalla.eleccionEscena(1);
         }
-    }*/
+    }
 }
 
 

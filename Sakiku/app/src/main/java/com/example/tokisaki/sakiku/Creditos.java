@@ -9,8 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.Layout;
@@ -71,9 +69,7 @@ public class Creditos extends Escenas {
      */
     private void inicializar() {
         creditos = context.getResources().getString(R.string.creditosTitulo);
-        //agradecimientos = context.getResources().getString(R.string.agredecimientos);
         creditosTexto = context.getResources().getString(R.string.creditosTexto);
-        //agradecimientosTexto = context.getResources().getString(R.string.agredecimientosTexto);
         this.pDescripcion = new TextPaint();
         this.pDescripcion.setColor(Color.RED);
         this.pDescripcion.setTextSize(getPixels(20));

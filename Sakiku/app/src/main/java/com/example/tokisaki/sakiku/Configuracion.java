@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
@@ -134,11 +133,8 @@ public class Configuracion extends Escenas{
      * @param c Lienzo sobre el que dibujar
      */
     public void dibujar (Canvas c){
+        c.drawColor(Color.BLACK);
         c.drawBitmap(fondo,0,0,null);
-        c.drawRect(rMusica,pBoton);
-        c.drawRect(rEfectos,pBoton);
-        c.drawRect(rVibrar,pBoton);
-        c.drawRect(salir,pBoton);
         c.drawText(musica,0 + getPixels(100),rMusica.centerY()+getPixels(25),l);
         c.drawText(efectos,0 + getPixels(100),rEfectos.centerY()+getPixels(25),l);
         c.drawText(vibracion,0 + getPixels(100),rVibrar.centerY()+getPixels(25),l);

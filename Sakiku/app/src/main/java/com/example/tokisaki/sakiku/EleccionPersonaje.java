@@ -95,8 +95,6 @@ public class EleccionPersonaje extends Escenas {
         posBx = anchoPantalla / 2 - getPixels(25);
         posBf = anchoPantalla / 2 + getPixels(25);
         inicializarRects();
-        if(jugando)Inicio.musicaJuego.stop();
-        Inicio.mediaPlayer.start();
 
     }
 
@@ -140,13 +138,9 @@ public class EleccionPersonaje extends Escenas {
         c.drawColor(Color.BLACK);
         c.drawBitmap(fondo, 0, 0, null);
         c.drawText(titulo, posTitulo.x, posTitulo.y, l);
-        c.drawRect(avent, pBoton);
-        c.drawRect(nin, pBoton);
-        c.drawRect(rob, pBoton);
         c.drawText(aventurero, posAventurero.x, posAventurero.y, p);
         c.drawText(ninja, posNinja.x, posNinja.y, p);
         c.drawText(robot, posRobot.x, posRobot.y, p);
-        c.drawText(info.personaje, 0, altoPantalla - getPixels(30), l);
     }
 
     /***
