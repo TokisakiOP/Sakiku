@@ -18,21 +18,29 @@ namespace ServidorProyecto
         static readonly private object l = new object();
         static void Main(string[] args)
         {
-            bool enEjecucion = true;
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, puerto);
-            Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            s.Bind(ie);
-            s.Listen(10);
-            Socket jugadores = null;
-
-            while (enEjecucion)
+            try
             {
-                jugadores = s.Accept();
-                Thread hilo = new Thread(hiloJugadores);
-                hilo.Start(jugadores);
+                bool enEjecucion = true;
+                IPEndPoint ie = new IPEndPoint(IPAddress.Any, puerto);
+                Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                s.Bind(ie);
+                s.Listen(10);
+                Socket jugadores = null;
+                while (enEjecucion)
+                {
+                    jugadores = s.Accept();
+                    Thread hilo = new Thread(hiloJugadores);
+                    hilo.Start(jugadores);
 
+                }
+                s.Close();
             }
-            s.Close();
+            catch (SocketException e)
+            {
+                Console.WriteLine(
+               "Error de conexión con servidor.\nAsegurese de que el puerto 4000 este libre y vuelva a intentarlo");
+                Console.ReadKey();
+            }
         }
         static public void hiloJugadores(object jugador)
         {
